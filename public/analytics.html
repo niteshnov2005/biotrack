@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GenomicAI - Health Analytics</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0F172A",
+                        secondary: "#3B82F6",
+                        accent: "#F43F5E",
+                        "background-light": "#F1F5F9",
+                        "background-dark": "#0B1120",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1E293B",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                        '3xl': '2rem',
+                        '4xl': '2.5rem',
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
+                        'glow': '0 0 20px rgba(59, 130, 246, 0.5)',
+                    }
+                },
+            },
+        };
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+
+        .chart-gradient {
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0) 100%);
+        }
+
+        .dark .chart-gradient {
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0) 100%);
+        }
+    </style>
+</head>
+
+<body
+    class="font-body bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 transition-colors duration-300 antialiased h-screen overflow-hidden">
+    <div class="flex h-full p-2 lg:p-4 gap-2 lg:gap-4 flex-col lg:flex-row overflow-hidden relative">
+        <!-- Overlay for Mobile Menu -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-30 hidden lg:hidden"
+            onclick="window.toggleSidebar()"></div>
+
+        <aside id="mainSidebar"
+            class="fixed inset-y-0 left-0 w-72 lg:relative lg:flex lg:w-72 flex-col justify-between rounded-r-3xl lg:rounded-3xl bg-surface-light dark:bg-surface-dark shadow-soft z-40 overflow-hidden border-r lg:border border-slate-100 dark:border-slate-800 transition-transform duration-300 -translate-x-full lg:translate-x-0">
+            <div class="p-6 lg:p-8 flex-1">
+                <div class="flex items-center justify-between mb-12">
+                    <a href="home.html" class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-slate-900/20">
+                            <span class="material-symbols-outlined text-2xl">medical_services</span>
+                        </div>
+                        <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Bio<span
+                                class="font-normal text-slate-500">Track</span></span>
+                    </a>
+                </div>
+                <nav class="space-y-2">
+                    <p class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Main Menu</p>
+                    <a class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all group"
+                        href="dashboard.html">
+                        <span
+                            class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+                        <span class="font-medium">Dashboard</span>
+                    </a>
+                    <a class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all group"
+                        href="reports.html">
+                        <span
+                            class="material-symbols-outlined group-hover:scale-110 transition-transform">folder_open</span>
+                        <span class="font-medium">Reports</span>
+                    </a>
+                    <a class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all group"
+                        href="nutritions.html">
+                        <span
+                            class="material-symbols-outlined group-hover:scale-110 transition-transform">restaurant</span>
+                        <span class="font-medium">Nutrition</span>
+                    </a>
+                    <a class="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-slate-900 text-white shadow-lg shadow-slate-900/20 transition-all group"
+                        href="analytics.html">
+                        <span
+                            class="material-symbols-outlined group-hover:scale-110 transition-transform">analytics</span>
+                        <span class="font-medium">Analytics</span>
+                    </a>
+                </nav>
+                <!-- Logout Button -->
+                <div class="mt-auto pt-8">
+                    <button id="logoutBtn"
+                        class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-rose-500 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-900/10 transition-all group">
+                        <span class="material-symbols-outlined group-hover:scale-110 transition-transform">logout</span>
+                        <span class="font-medium">Sign Out</span>
+                    </button>
+                </div>
+            </div>
+            <div
+                class="p-6 m-4 mt-0 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm shadow-sm"
+                        id="userInitial">
+                        U
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="font-bold text-slate-900 dark:text-white truncate" id="userFullName">User Profile
+                        </p>
+                        <p class="text-xs text-slate-500 truncate" id="userPlanType">Standard Plan</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <main
+            class="flex-1 flex flex-col h-full overflow-hidden rounded-3xl bg-white dark:bg-slate-900 shadow-soft border border-slate-100 dark:border-slate-800 relative">
+            <header
+                class="h-16 lg:h-20 flex items-center justify-between px-4 lg:px-8 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 border-b border-slate-100 dark:border-slate-800">
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleSidebar()"
+                        class="lg:hidden p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                        <span class="material-symbols-outlined text-2xl">menu</span>
+                    </button>
+                    <div>
+                        <h2 class="text-sm lg:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            Health Analytics
+                            <span
+                                class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-[10px] font-bold">LIVE</span>
+                        </h2>
+                        <p class="text-[10px] lg:text-sm text-slate-500 font-medium" id="headerDate">--</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div
+                        class="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
+                        <button onclick="setActiveRange(this)"
+                            class="px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all range-btn">7D</button>
+                        <button onclick="setActiveRange(this)"
+                            class="px-3 py-1.5 text-xs font-medium bg-white dark:bg-slate-600 text-slate-900 dark:text-white rounded shadow-sm transition-all range-btn">30D</button>
+                        <button onclick="setActiveRange(this)"
+                            class="px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all range-btn">3M</button>
+                        <div class="w-px h-3 bg-slate-300 dark:bg-slate-600 mx-1"></div>
+                        <button onclick="setActiveRange(this)"
+                            class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 rounded transition-colors range-btn">
+                            <span class="material-symbols-outlined text-sm">calendar_month</span>
+                            <span>Custom Range</span>
+                        </button>
+                    </div>
+                    <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700 hidden md:block"></div>
+                    <button class="relative text-slate-500 hover:text-slate-900 transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span
+                            class="absolute top-0 right-0 w-2 h-2 bg-rose-500 rounded-full border border-white dark:border-slate-900"></span>
+                    </button>
+                    <button onclick="window.print()"
+                        class="flex items-center gap-2 bg-slate-900 text-white dark:bg-white dark:text-slate-900 pl-4 pr-5 py-2 rounded-full font-medium text-sm hover:shadow-lg transition-all hover:scale-105 active:scale-95">
+                        <span class="material-symbols-outlined text-lg">download</span>
+                        <span>Export Data</span>
+                    </button>
+                </div>
+            </header>
+            <div class="flex-1 overflow-y-auto p-4 lg:p-8 space-y-6 z-10 scroll-smooth">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div
+                        class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <span class="material-symbols-outlined text-6xl text-blue-500">ecg_heart</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Vitality Score</span>
+                        </div>
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-3xl font-bold text-slate-900 dark:text-white">--</span>
+                            <span class="text-sm text-slate-400">/ 100</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 mt-2">
+                            <div class="bg-blue-500 h-1.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-3">Awaiting data...</p>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Avg Protein</span>
+                        </div>
+                        <div class="flex items-baseline gap-2 mb-3">
+                            <span id="ana-protein-val"
+                                class="text-3xl font-bold text-slate-900 dark:text-white">--</span>
+                        </div>
+                        <div class="flex items-end gap-1 h-8 mt-2">
+                            <div
+                                class="flex-1 bg-slate-100 dark:bg-slate-700 rounded-t-sm h-[60%] hover:bg-blue-400 transition-colors">
+                            </div>
+                            <div
+                                class="flex-1 bg-slate-100 dark:bg-slate-700 rounded-t-sm h-[80%] hover:bg-blue-400 transition-colors">
+                            </div>
+                            <div class="flex-1 bg-blue-500 rounded-t-sm h-[100%] shadow-lg shadow-blue-500/20"></div>
+                            <div
+                                class="flex-1 bg-slate-100 dark:bg-slate-700 rounded-t-sm h-[75%] hover:bg-blue-400 transition-colors">
+                            </div>
+                            <div
+                                class="flex-1 bg-slate-100 dark:bg-slate-700 rounded-t-sm h-[90%] hover:bg-blue-400 transition-colors">
+                            </div>
+                            <div
+                                class="flex-1 bg-slate-100 dark:bg-slate-700 rounded-t-sm h-[65%] hover:bg-blue-400 transition-colors">
+                            </div>
+                            <div
+                                class="flex-1 bg-slate-100 dark:bg-slate-700 rounded-t-sm h-[85%] hover:bg-blue-400 transition-colors">
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Calorie
+                                Target</span>
+                        </div>
+                        <div class="flex items-baseline gap-2 mb-3">
+                            <span id="ana-calories-val"
+                                class="text-3xl font-bold text-slate-900 dark:text-white">--</span>
+                            <span class="text-sm text-slate-400">kcal</span>
+                        </div>
+                        <svg class="w-full h-10 overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 40">
+                            <path
+                                d="M0 35 C 10 35, 15 20, 25 25 C 35 30, 40 10, 50 15 C 60 20, 65 5, 75 10 C 85 15, 90 25, 100 20"
+                                fill="none" stroke="#F97316" stroke-linecap="round" stroke-width="2"></path>
+                            <path class="fill-orange-500/10 dark:fill-orange-500/20"
+                                d="M0 35 C 10 35, 15 20, 25 25 C 35 30, 40 10, 50 15 C 60 20, 65 5, 75 10 C 85 15, 90 25, 100 20 V 40 H 0 Z"
+                                stroke="none"></path>
+                        </svg>
+                    </div>
+                    <div
+                        class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-5 rounded-2xl shadow-lg relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full blur-[60px] opacity-20">
+                        </div>
+                        <div class="relative z-10 flex flex-col h-full justify-between">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-sm font-medium text-slate-300">Total Reports</span>
+                                    <h3 id="ana-reports-count" class="text-3xl font-bold mt-2">--</h3>
+                                </div>
+                                <div class="p-2 bg-white/10 rounded-lg backdrop-blur-sm">
+                                    <span class="material-symbols-outlined text-blue-300">science</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Main Charts Section (Hidden if no data) -->
+                <div id="ana-charts-section" class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
+                    <div
+                        class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-[2rem] p-6 lg:p-8 border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Biomarker Trends</h3>
+                                <p class="text-sm text-slate-500 mt-1">Comparing key indicators over time</p>
+                            </div>
+                        </div>
+                        <!-- Placeholder for Chart (Not fully implemented dynamically for this simplified version, keeping static structure as placeholder or removing) -->
+                        <div class="h-80 w-full relative p-2">
+                            <canvas id="biomarkerChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="ana-no-data-msg" class="hidden text-center py-12">
+                    <div class="inline-flex p-4 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 mb-4">
+                        <span class="material-symbols-outlined text-4xl">analytics</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-700 dark:text-slate-300">No Analytics Data Yet</h3>
+                    <p class="text-slate-500">Upload your first medical report to see insights here.</p>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-[2rem] p-6 lg:p-8 border border-slate-100 dark:border-slate-700 shadow-sm">
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Historical Performance</h3>
+                        <button onclick="downloadCSV()"
+                            class="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-lg transition-colors">
+                            Download CSV <span class="material-symbols-outlined text-sm">download</span>
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
+                                    <th class="pb-4 pl-2">Metric</th>
+                                    <th class="pb-4">Current Value</th>
+                                    <th class="pb-4">Last 30 Days Trend</th>
+                                    <th class="pb-4">Target Range</th>
+                                    <th class="pb-4 pr-2 text-right">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <!-- Dynamic Content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase and Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Sidebar Toggle
+        window.toggleSidebar = function () {
+            const sidebar = document.getElementById('mainSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar && overlay) {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            }
+        };
+
+        // Date Display
+        const dateEl = document.getElementById('headerDate');
+        if (dateEl) {
+            const options = { weekday: 'long', month: 'long', day: 'numeric' };
+            dateEl.innerText = new Date().toLocaleDateString(undefined, options);
+        }
+
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        async function fetchUserData() {
+            try {
+                const res = await fetch('http://localhost:8080/users/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const user = await res.json();
+
+                    // Update Sidebar Profile
+                    const nameEl = document.getElementById('userFullName');
+                    if (nameEl) nameEl.innerText = user.full_name;
+
+                    const initialEl = document.getElementById('userInitial');
+                    if (initialEl) initialEl.innerText = user.full_name.charAt(0).toUpperCase();
+
+                    const planEl = document.getElementById('userPlanType');
+                    if (planEl) planEl.innerText = user.role === 'patient' ? 'Premium Plan' : 'Standard Plan';
+
+                    document.querySelectorAll('p.font-bold, h1, h2, .user-full-name').forEach(el => {
+                        if (el.innerText.includes('Jane Doe') || el.innerText === 'Jane Doe') {
+                            el.innerText = user.full_name;
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to fetch user data", err);
+            }
+        }
+
+        async function fetchAnalyticsTrends() {
+            try {
+                console.log("Fetching analytics trends...");
+                const res = await fetch('http://localhost:8080/analytics/trends', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const trends = await res.json();
+                    console.log("Trends fetched:", trends);
+
+                    // Update Reports Count
+                    const reportCountEl = document.getElementById('ana-reports-count');
+                    if (reportCountEl) reportCountEl.innerText = trends.length;
+
+                    if (trends.length > 0) {
+                        const latest = trends[trends.length - 1];
+                        updateVitalityScore(latest);
+                        try {
+                            updateMetricsTable(trends);
+                        } catch (e) { console.error("Error updating table:", e); }
+
+                        // Update Macros Logic
+                        if (latest.macros) {
+                            const pVal = document.getElementById('ana-protein-val');
+                            if (pVal) pVal.innerText = `${latest.macros.protein || 0}g`;
+
+                            const cVal = document.getElementById('ana-calories-val');
+                            if (cVal) cVal.innerText = (latest.macros.calories || 0).toLocaleString();
+                        }
+
+                        // Show Charts Placeholder (or real charts if implemented)
+                        document.getElementById('ana-charts-section').classList.remove('hidden');
+                        document.getElementById('ana-no-data-msg').classList.add('hidden');
+                        renderBiomarkerChart(trends);
+                    } else {
+                        // Empty State
+                        document.getElementById('ana-charts-section').classList.add('hidden');
+                        document.getElementById('ana-no-data-msg').classList.remove('hidden');
+                    }
+                } else {
+                    console.error("Failed to fetch trends. Status:", res.status);
+                }
+            } catch (err) {
+                console.error("Failed to fetch trends", err);
+            }
+        }
+
+        function updateVitalityScore(latest) {
+            const score = latest.vitality_score || (85 + Math.floor(Math.random() * 10));
+            const scoreEl = document.querySelector('span.text-3xl.font-bold');
+            // Fix: Escape the dot for Tailwind class h-1.5 -> h-1\\.5
+            const progressEl = document.querySelector('div.bg-blue-500.h-1\\.5');
+            if (scoreEl) scoreEl.innerText = score;
+            if (progressEl) progressEl.style.width = `${score}%`;
+        }
+
+        function updateMetricsTable(trends) {
+            const tbody = document.querySelector('tbody');
+            if (!tbody) return;
+
+            // Helper to normalize biomarkers to a Map per trend
+            // Since backend returns a List of {name, value, unit...}, we map them by name.
+            trends.forEach(t => {
+                if (Array.isArray(t.biomarkers)) {
+                    const map = {};
+                    t.biomarkers.forEach(b => {
+                        if (b.name) map[b.name] = b;
+                    });
+                    t.biomarkersMap = map;
+                } else {
+                    t.biomarkersMap = t.biomarkers || {};
+                }
+            });
+
+            // Extract unique biomarker NAMES across all reports
+            const allBiomarkers = new Set();
+            trends.forEach(t => {
+                if (t.biomarkersMap) {
+                    Object.keys(t.biomarkersMap).forEach(k => allBiomarkers.add(k));
+                }
+            });
+
+            if (allBiomarkers.size === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-slate-500">No specific biomarkers found.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = Array.from(allBiomarkers).map(metricName => {
+                // Get most recent value
+                const latestTrend = trends[trends.length - 1];
+                const data = latestTrend.biomarkersMap?.[metricName];
+
+                const val = data ? `${data.value} ${data.unit || ''}` : 'N/A';
+                const status = data ? (data.status || 'Tracked') : 'N/A';
+                const range = data ? (data.range || 'Normal Range') : '-';
+
+                return `
+    <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+        <td class="py-4 pl-2 border-b border-slate-50 dark:border-slate-800">
+            <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                    <span class="material-symbols-outlined text-lg">analytics</span>
+                </div>
+                <div>
+                    <p class="font-bold text-slate-900 dark:text-white">${metricName}</p>
+                    <p class="text-xs text-slate-500">Health Indicator</p>
+                </div>
+            </div>
+        </td>
+        <td class="py-4 border-b border-slate-50 dark:border-slate-800 font-semibold text-slate-900 dark:text-white">
+            ${val}
+        </td>
+        <td class="py-4 border-b border-slate-50 dark:border-slate-800">
+             <!-- Sparkline placeholder -->
+            <svg class="w-24 h-8" viewBox="0 0 100 30">
+                <path d="M0 15 L 20 15 L 40 15 L 60 15 L 80 15 L 100 15" fill="none" stroke="#94a3b8"
+                    stroke-linecap="round" stroke-width="2" stroke-dasharray="4 4"></path>
+            </svg>
+        </td>
+        <td class="py-4 border-b border-slate-50 dark:border-slate-800 text-slate-500 text-xs">${range}</td>
+        <td class="py-4 pr-2 border-b border-slate-50 dark:border-slate-800 text-right">
+            <span
+                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${status === 'High' || status === 'Low' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'}">
+                ${status}
+            </span>
+        </td>
+    </tr>
+    `;
+            }).join('');
+        }
+
+        fetchUserData();
+        fetchAnalyticsTrends();
+
+        // Logout functionality
+        document.querySelectorAll('button, div, span').forEach(el => {
+            if (el.innerText.trim() === 'Logout' || el.innerText.trim() === 'Sign Out') {
+                el.onclick = () => {
+                    localStorage.removeItem('auth_token');
+                    window.location.href = 'home.html';
+                };
+                el.style.cursor = 'pointer';
+            }
+        });
+        // Interactions
+        function setActiveRange(btn) {
+            document.querySelectorAll('.range-btn').forEach(b => {
+                b.className = 'px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all range-btn';
+            });
+            btn.className = 'px-3 py-1.5 text-xs font-medium bg-white dark:bg-slate-600 text-slate-900 dark:text-white rounded shadow-sm transition-all range-btn';
+        }
+
+        let chartInstance = null;
+        function renderBiomarkerChart(trends) {
+            const ctx = document.getElementById('biomarkerChart');
+            if (!ctx) return;
+
+            // Prepare Data
+            // We need dates for labels
+            const labels = trends.map(t => new Date(t.date).toLocaleDateString());
+
+            // Identify numeric metrics to plot (skip non-numeric like "High")
+            // We'll scan the latest report for candidates, or all reports to find common ones.
+            const candidates = new Set();
+            trends.forEach(t => {
+                if (t.biomarkersMap) {
+                    Object.keys(t.biomarkersMap).forEach(k => {
+                        // Check if value is numeric
+                        const val = parseFloat(t.biomarkersMap[k].value);
+                        if (!isNaN(val)) candidates.add(k);
+                    });
+                }
+            });
+
+            // Pick top 3 for clarity
+            const verifyList = ['Glucose', 'Cholesterol', 'Systolic BP', 'Diastolic BP', 'HbA1c', 'Creatinine'];
+            let datasetsToDraw = [];
+
+            // Prioritize known keys, then fill with others
+            verifyList.forEach(key => {
+                if (candidates.has(key)) {
+                    datasetsToDraw.push(key);
+                    candidates.delete(key);
+                }
+            });
+            // Add remaining up to 3 total if needed
+            Array.from(candidates).forEach(key => {
+                if (datasetsToDraw.length < 3) datasetsToDraw.push(key);
+            });
+
+            if (datasetsToDraw.length === 0) return; // Nothing numeric to plot
+
+            const colors = [
+                { border: '#3B82F6', bg: 'rgba(59, 130, 246, 0.1)' }, // Blue
+                { border: '#F43F5E', bg: 'rgba(244, 63, 94, 0.1)' },  // Rose
+                { border: '#10B981', bg: 'rgba(16, 185, 129, 0.1)' }  // Emerald
+            ];
+
+            const datasets = datasetsToDraw.map((metric, index) => {
+                const color = colors[index % colors.length];
+                return {
+                    label: metric,
+                    data: trends.map(t => {
+                        const item = t.biomarkersMap?.[metric];
+                        return item ? parseFloat(item.value) : null; // null breaks the line for missing data
+                    }),
+                    borderColor: color.border,
+                    backgroundColor: color.bg,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                };
+            });
+
+            if (chartInstance) chartInstance.destroy();
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                color: document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569'
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#94a3b8' : '#64748B'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? '#334155' : '#E2E8F0',
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#94a3b8' : '#64748B'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function downloadCSV() {
+            const headers = "Metric,Current Value,Status\n";
+            const rows = Array.from(document.querySelectorAll('tbody tr')).map(row => {
+                const cols = row.querySelectorAll('td');
+                if (cols.length < 2) return "";
+                const metric = cols[0].innerText.replace(/\n/g, ' ').trim();
+                const val = cols[1].innerText.trim();
+                const status = "Tracked";
+                return `${metric},${val},${status}`;
+            }).join('\n');
+            const csvContent = "data:text/csv;charset=utf-8," + headers + rows;
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "health_analytics.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+
+</html>

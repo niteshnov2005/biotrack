@@ -1,0 +1,16 @@
+.git
+__pycache__
+*.pyc
+*.pyo
+venv
+.env
+.DS_Store
+.firebase
+.firebaserc
+node_modules
+firebase.json
+package.json
+package-lock.json
+debug_*.py
+test_*.py
+verify_*.py

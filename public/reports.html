@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GenomicAI - Reports Management</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0F172A", // Slate 900 - Deep, professional dark for sophistication
+                        secondary: "#3B82F6", // Blue 500 - Trusted medical blue accent
+                        accent: "#F43F5E", // Rose 500 - For the glowing heart effect vibe
+                        "background-light": "#F1F5F9", // Slate 100 - clean tech background
+                        "background-dark": "#0B1120",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1E293B",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                        '3xl': '2rem',
+                        '4xl': '2.5rem',
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
+                        'glow': '0 0 20px rgba(59, 130, 246, 0.5)',
+                    }
+                },
+            },
+        };
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        .hero-gradient-text {
+            background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dark .hero-gradient-text {
+            background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status-dot {
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+    </style>
+</head>
+
+<body
+    class="font-body bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 transition-colors duration-300 antialiased h-screen overflow-hidden">
+    <div class="flex h-full p-2 lg:p-4 gap-2 lg:gap-4 flex-col lg:flex-row overflow-hidden relative">
+        <!-- Overlay for Mobile Menu -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-30 hidden lg:hidden"
+            onclick="toggleSidebar()"></div>
+
+        <aside id="mainSidebar"
+            class="fixed inset-y-0 left-0 w-72 lg:relative lg:flex lg:w-72 flex-col justify-between rounded-r-3xl lg:rounded-3xl bg-surface-light dark:bg-surface-dark shadow-soft z-40 overflow-hidden border-r lg:border border-slate-100 dark:border-slate-800 transition-transform duration-300 -translate-x-full lg:translate-x-0">
+            <div class="p-6 lg:p-8 flex-1">
+                <div class="flex items-center justify-between mb-12">
+                    <a href="home.html" class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-slate-900/20">
+                            <span class="material-symbols-outlined text-2xl">medical_services</span>
+                        </div>
+                        <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Bio<span
+                                class="font-normal text-slate-500">Track</span></span>
+                    </a>
+                </div>
+                <nav class="space-y-2">
+                    <p class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Main Menu</p>
+                    <a class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all group"
+                        href="dashboard.html">
+                        <span
+                            class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+                        <span class="font-medium">Dashboard</span>
+                    </a>
+                    <a class="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-slate-900 text-white shadow-lg shadow-slate-900/20 transition-all group"
+                        href="reports.html">
+                        <span
+                            class="material-symbols-outlined group-hover:scale-110 transition-transform">folder_open</span>
+                        <span class="font-medium">Reports</span>
+                    </a>
+                    <a class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all group"
+                        href="nutritions.html">
+                        <span
+                            class="material-symbols-outlined group-hover:scale-110 transition-transform">restaurant</span>
+                        <span class="font-medium">Nutrition</span>
+                    </a>
+                    <a class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all group"
+                        href="analytics.html">
+                        <span
+                            class="material-symbols-outlined group-hover:scale-110 transition-transform">analytics</span>
+                        <span class="font-medium">Analytics</span>
+                    </a>
+                </nav>
+                <!-- Logout Button -->
+                <div class="mt-auto pt-8">
+                    <button id="logoutBtn"
+                        class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-rose-500 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-900/10 transition-all group">
+                        <span class="material-symbols-outlined group-hover:scale-110 transition-transform">logout</span>
+                        <span class="font-medium">Sign Out</span>
+                    </button>
+                </div>
+            </div>
+            <div
+                class="p-6 m-4 mt-0 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm shadow-sm"
+                        id="userInitial">
+                        U
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="font-bold text-slate-900 dark:text-white truncate" id="userFullName">User Profile
+                        </p>
+                        <p class="text-xs text-slate-500 truncate" id="userPlanType">Standard Plan</p>
+                    </div>
+                </div>
+        </aside>
+        <main
+            class="flex-1 flex flex-col h-full overflow-hidden rounded-3xl bg-white dark:bg-slate-900 shadow-soft border border-slate-100 dark:border-slate-800 relative">
+            <div
+                class="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-b from-blue-50 to-transparent dark:from-slate-800 dark:to-transparent rounded-full blur-3xl opacity-60 pointer-events-none -translate-y-1/2 translate-x-1/3 z-0">
+            </div>
+            <header
+                class="h-16 lg:h-20 flex items-center justify-between px-4 lg:px-8 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 border-b border-slate-100 dark:border-slate-800">
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleSidebar()"
+                        class="lg:hidden p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                        <span class="material-symbols-outlined text-2xl">menu</span>
+                    </button>
+                    <div>
+                        <p class="text-[10px] lg:text-sm text-slate-500 font-medium" id="headerDate">--</p>
+                        <h2 class="text-sm lg:text-lg font-bold text-slate-900 dark:text-white">Reports Management</h2>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <button onclick="alert('No new notifications')"
+                        class="relative text-slate-500 hover:text-slate-900 transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span
+                            class="absolute top-0 right-0 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
+                    </button>
+                </div>
+            </header>
+            <div class="flex-1 overflow-y-auto p-4 lg:p-8 space-y-6 z-10 scroll-smooth">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="relative w-full md:w-96 group">
+                        <span
+                            class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">search</span>
+                        <input id="searchInput"
+                            class="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm focus:ring-2 focus:ring-blue-500 placeholder-slate-400 text-slate-900 dark:text-white transition-all outline-none"
+                            placeholder="Search reports by ID or type..." type="text" />
+                    </div>
+                    <div class="flex items-center gap-3 w-full md:w-auto">
+                        <div class="relative group">
+                            <select id="statusFilter" onchange="renderReports()"
+                                class="appearance-none px-4 py-3.5 pr-10 rounded-2xl bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors border border-slate-100 dark:border-slate-700 cursor-pointer outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="all">All Status</option>
+                                <option value="processed">Processed</option>
+                                <option value="analyzing">Analyzing</option>
+                                <option value="failed">Failed</option>
+                            </select>
+                            <span
+                                class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
+                        </div>
+                        <button onclick="triggerUpload()" id="uploadBtn"
+                            class="px-6 py-3.5 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold shadow-lg shadow-slate-900/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2 whitespace-nowrap">
+                            <span class="material-symbols-outlined">upload_file</span>
+                            <span>Upload New Report</span>
+                        </button>
+                        <!-- HIdden Input for Upload -->
+                        <input type="file" id="reportInput" class="hidden" accept=".pdf,image/*">
+                    </div>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-soft border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[800px]">
+                            <thead
+                                class="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-700/50 text-xs uppercase text-slate-500 font-semibold tracking-wider">
+                                <tr>
+                                    <th class="p-6 pl-8">Report Details</th>
+                                    <th class="p-6">Upload Date</th>
+                                    <th class="p-6">Status</th>
+                                    <th class="p-6">Type</th>
+                                    <th class="p-6 pr-8 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-700/50 text-sm">
+                                <!-- Dynamic Content -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div
+                        class="p-6 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+                        <p class="text-sm text-slate-500">Showing <span
+                                class="font-bold text-slate-900 dark:text-white">1-5</span> of <span
+                                class="font-bold text-slate-900 dark:text-white">12</span> reports</p>
+                        <div class="flex items-center gap-2">
+                            <button
+                                class="px-4 py-2 text-sm font-medium text-slate-500 bg-slate-50 dark:bg-slate-800 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-50 transition-colors"
+                                disabled="" id="prevBtn">Previous</button>
+                            <button
+                                class="px-4 py-2 text-sm font-medium text-slate-900 dark:text-white bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm"
+                                id="nextBtn">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div id="resultsModal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div
+            class="bg-white dark:bg-slate-800 rounded-[2.5rem] w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col border border-slate-100 dark:border-slate-700">
+            <div
+                class="p-8 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/50">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-2xl">analytics</span>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Analysis Results</h3>
+                        <p class="text-sm text-slate-500">Comprehensive AI Health Breakdown</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('resultsModal').classList.add('hidden')"
+                    class="w-10 h-10 rounded-full hover:bg-white dark:hover:bg-slate-700 transition-colors flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div id="modalContent" class="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+                <!-- Data will be injected here -->
+            </div>
+            <div
+                class="p-6 border-t border-slate-100 dark:border-slate-700 flex justify-end gap-4 bg-slate-50/50 dark:bg-slate-900/50">
+                <button onclick="window.print()"
+                    class="px-6 py-3 rounded-xl border border-slate-200 dark:border-slate-700 font-bold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 transition-all">Download
+                    PDF</button>
+                <button onclick="document.getElementById('resultsModal').classList.add('hidden')"
+                    class="px-8 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold shadow-lg transition-all active:scale-95">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase and Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Sidebar Toggle
+        window.toggleSidebar = function () {
+            const sidebar = document.getElementById('mainSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar && overlay) {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            }
+        };
+
+        // Date Display
+        const dateEl = document.getElementById('headerDate');
+        if (dateEl) {
+            const options = { weekday: 'long', month: 'long', day: 'numeric' };
+            dateEl.innerText = new Date().toLocaleDateString(undefined, options);
+        }
+
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        async function fetchUserData() {
+            if (!token) return;
+            try {
+                const res = await fetch('http://localhost:8080/users/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const user = await res.json();
+
+                    // Update Sidebar Profile
+                    const nameEl = document.getElementById('userFullName');
+                    if (nameEl) nameEl.innerText = user.full_name;
+
+                    const initialEl = document.getElementById('userInitial');
+                    if (initialEl) initialEl.innerText = user.full_name.charAt(0).toUpperCase();
+
+                    const planEl = document.getElementById('userPlanType');
+                    if (planEl) planEl.innerText = user.role === 'patient' ? 'Premium Plan' : 'Standard Plan';
+
+                    document.querySelectorAll('p.font-bold, h1, h2, .user-full-name').forEach(el => {
+                        if (el.innerText.includes('Jane Doe') || el.innerText === 'Jane Doe') {
+                            el.innerText = user.full_name;
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to fetch user data", err);
+            }
+        }
+
+        let allReports = [];
+        let currentPage = 1;
+        const itemsPerPage = 5;
+
+        async function fetchReportsHistory() {
+            if (!token) return;
+            try {
+                const res = await fetch('http://localhost:8080/reports/history', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    allReports = await res.json();
+                    renderReports();
+                }
+            } catch (err) {
+                console.error("Failed to fetch history", err);
+            }
+        }
+
+        function renderReports() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+
+            const filtered = allReports.filter(r => {
+                const matchesSearch = r.type.toLowerCase().includes(searchTerm) ||
+                    r.id.toString().includes(searchTerm) ||
+                    (r.status && r.status.toLowerCase().includes(searchTerm));
+                const matchesStatus = statusFilter === 'all' || (r.status && r.status.toLowerCase() === statusFilter);
+                return matchesSearch && matchesStatus;
+            });
+
+            const total = filtered.length;
+            const totalPages = Math.ceil(total / itemsPerPage);
+
+            // Adjust current page if out of bounds
+            if (currentPage > totalPages) currentPage = totalPages || 1;
+
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageItems = filtered.slice(start, end);
+
+            renderHistory(pageItems);
+            updatePaginationUI(start + 1, Math.min(end, total), total, totalPages);
+        }
+
+        function updatePaginationUI(start, end, total, totalPages) {
+            const showingText = total === 0 ? '0-0' : `${start}-${end}`;
+            const countEl = document.querySelector('p.text-sm.text-slate-500');
+            if (countEl) {
+                countEl.innerHTML = `Showing <span class="font-bold text-slate-900 dark:text-white">${showingText}</span> of <span
+        class="font-bold text-slate-900 dark:text-white">${total}</span> reports`;
+            }
+
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            if (prevBtn) {
+                prevBtn.disabled = currentPage <= 1; prevBtn.onclick = () => {
+                    if (currentPage > 1) { currentPage--; renderReports(); }
+                };
+            }
+            if (nextBtn) {
+                // Disable if on last page or no items
+                nextBtn.disabled = currentPage >= totalPages || total === 0;
+            }
+        }
+
+        // Search Listener
+        document.getElementById('searchInput').addEventListener('input', () => {
+            currentPage = 1;
+            renderReports();
+        });
+
+        function renderHistory(history) {
+            const tbody = document.querySelector('tbody');
+            if (history.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-12 text-center text-slate-500">No reports found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = history.map(row => {
+                const date = new Date(row.created_at).toLocaleDateString();
+                const time = new Date(row.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const viewBtn = `<button onclick="viewReportDetail(${row.id})"
+            class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-500 hover:bg-white hover:text-blue-600 hover:shadow-md transition-all dark:hover:bg-slate-700 dark:hover:text-blue-400"
+            title="View Report"><span class="material-symbols-outlined text-[20px]">visibility</span></button>`;
+                const deleteBtn = `<button onclick="deleteReport(${row.id})"
+            class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-500 hover:bg-white hover:text-rose-600 hover:shadow-md transition-all dark:hover:bg-slate-700 dark:hover:text-rose-400"
+            title="Delete Report"><span class="material-symbols-outlined text-[20px]">delete</span></button>`;
+
+                return `
+        <tr class="group hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+            <td class="p-6 pl-8">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-900/20 text-rose-500 flex items-center justify-center shadow-sm">
+                        <span class="material-symbols-outlined">picture_as_pdf</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 dark:text-white text-base">Medical Report #${row.id}</h4>
+                        <p class="text-xs text-slate-500 mt-0.5">AI Analysis Result</p>
+                    </div>
+                </div>
+            </td>
+            <td class="p-6 text-slate-600 dark:text-slate-300 font-medium">${date}<div
+                    class="text-xs text-slate-400 mt-0.5">${time}</div>
+            </td>
+            <td class="p-6"><span
+                    class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"><span
+                        class="status-dot bg-emerald-500"></span> ${row.status}</span></td>
+            <td class="p-6 text-slate-600 dark:text-slate-300">${row.type}</td>
+            <td class="p-6 pr-8 text-right">
+                <div class="flex items-center justify-end gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                    ${viewBtn}
+                    ${deleteBtn}
+                </div>
+            </td>
+        </tr>`;
+            }).join('');
+        }
+
+        async function viewReportDetail(id) {
+            if (!token) return;
+            try {
+                const res = await fetch(`http://localhost:8080/reports/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    showResults(data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch detail", err);
+            }
+        }
+
+        // Sidebar Toggle
+        window.toggleSidebar = function () {
+            const sidebar = document.getElementById('mainSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar && overlay) {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            }
+        };
+
+
+        async function deleteReport(id) {
+            if (!confirm("Are you sure you want to delete this report?")) return;
+            if (!token) return;
+
+            try {
+                const res = await fetch(`http://localhost:8080/reports/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    // Optimized: just remove row or re-fetch
+                    fetchReportsHistory();
+                } else {
+                    alert("Failed to delete report");
+                }
+            } catch (err) {
+                console.error("Delete failed", err);
+            }
+        }
+
+        // Upload Logic
+        function triggerUpload() {
+            document.getElementById('reportInput').click();
+        }
+
+        document.getElementById('reportInput').onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Show simple loading feedback
+            const btn = document.getElementById('uploadBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> <span>Uploading...</span>';
+
+            try {
+                const response = await fetch('http://localhost:8080/analyze-report', {
+                    method: 'POST',
+                    body: formData,
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showResults(data);
+                    fetchReportsHistory(); // Refresh list
+                } else {
+                    alert('Upload failed');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Error uploading');
+            } finally {
+                btn.innerHTML = originalText;
+                e.target.value = '';
+            }
+        };
+
+        function showResults(data) {
+            const modal = document.getElementById('resultsModal');
+            const content = document.getElementById('modalContent');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            content.innerHTML = `
+        <div class="space-y-8">
+            <!-- Diet Section -->
+            <div class="bg-emerald-50 dark:bg-emerald-900/20 p-8 rounded-[2.5rem] border border-emerald-100 dark:border-emerald-800">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-3xl">restaurant</span>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-emerald-800 dark:text-emerald-400">${data.diet_plan.diet_type}</h4>
+                        <p class="text-sm text-emerald-600 dark:text-emerald-500">AI-Optimized Nutrition Strategy</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h5 class="font-bold text-emerald-900 dark:text-emerald-300 mb-4 flex items-center gap-2">
+                             <span class="material-symbols-outlined text-sm">recommend</span>
+                             Key Recommendations
+                        </h5>
+                        <ul class="space-y-3">
+                            ${data.diet_plan.recommendations.map(r => `
+                            <li class="flex items-start gap-3 text-emerald-800 dark:text-emerald-300 text-sm">
+                                <span class="material-symbols-outlined text-xs mt-1">check_circle</span>
+                                ${r}
+                            </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h5 class="font-bold text-emerald-900 dark:text-emerald-300 mb-4 flex items-center gap-2">
+                             <span class="material-symbols-outlined text-sm">shopping_cart</span>
+                             Essential Shopping List
+                        </h5>
+                        <div class="flex flex-wrap gap-2">
+                             ${data.diet_plan.shopping_list.map(item => `
+                                <span class="px-3 py-1 rounded-full bg-white dark:bg-emerald-800/50 text-emerald-700 dark:text-emerald-300 text-xs font-bold border border-emerald-100 dark:border-emerald-700">${item}</span>
+                             `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-emerald-100 dark:border-emerald-800">
+                    <h5 class="font-bold text-emerald-900 dark:text-emerald-300 mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
+                         Sample Daily Meal Plan
+                    </h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        ${data.diet_plan.meals.map(meal => `
+                            <div class="p-4 rounded-2xl bg-white/50 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-800/50">
+                                <p class="text-[10px] font-bold text-emerald-600 dark:text-emerald-500 uppercase mb-1">${meal.time}</p>
+                                <p class="font-bold text-sm text-slate-900 dark:text-white mb-1">${meal.name}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">${meal.desc}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Biomarkers Section -->
+            <div class="space-y-6">
+                <div class="flex items-center justify-between">
+                    <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-2 lg:text-xl">
+                        <span class="material-symbols-outlined">biotech</span>
+                        Lab Biomarkers Analysis
+                    </h4>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Comparative Ranges</span>
+                </div>
+                
+                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700 text-[10px] uppercase font-bold text-slate-400">
+                            <tr>
+                                <th class="px-6 py-4">Biomarker</th>
+                                <th class="px-6 py-4">Actual Value</th>
+                                <th class="px-6 py-4">Normal Range</th>
+                                <th class="px-6 py-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
+                            ${data.biomarkers.map(b => {
+                const statusColor = b.status === 'Normal' ? 'text-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'text-rose-500 bg-rose-50 dark:bg-rose-900/20';
+                return `
+                                <tr class="group hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                    <td class="px-6 py-5 font-bold text-slate-700 dark:text-slate-200">${b.name}</td>
+                                    <td class="px-6 py-5">
+                                        <span class="text-lg font-bold text-slate-900 dark:text-white">${b.value}</span>
+                                        <span class="text-xs text-slate-400 font-medium ml-1">${b.unit}</span>
+                                    </td>
+                                    <td class="px-6 py-5 text-sm text-slate-600 dark:text-slate-400 font-medium">${b.range} <span class="text-[10px] ml-1 opacity-60">${b.unit}</span></td>
+                                    <td class="px-6 py-5">
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter ${statusColor}">${b.status}</span>
+                                    </td>
+                                </tr>`;
+            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700">
+                    <div class="flex gap-4">
+                        <span class="material-symbols-outlined text-blue-500">info</span>
+                        <div>
+                            <p class="text-sm font-bold text-slate-900 dark:text-white mb-1">AI Interpretation</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">${data.interpretation}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        }
+
+        function logout() {
+            localStorage.removeItem('auth_token');
+            window.location.href = 'home.html';
+        }
+
+        // Connect logout button
+        document.querySelectorAll('a, button, div, span').forEach(el => {
+            if (el.innerText.trim() === 'Logout' || el.innerText.trim() === 'Sign Out') {
+                el.onclick = logout;
+                el.style.cursor = 'pointer';
+            }
+        });
+
+        fetchUserData();
+        fetchReportsHistory();
+
+        // Expose functions to window for HTML event handlers
+        window.viewReportDetail = viewReportDetail;
+        window.deleteReport = deleteReport;
+        window.triggerUpload = triggerUpload;
+        window.renderReports = renderReports;
+        window.logout = logout;
+    </script>
+
+</html>

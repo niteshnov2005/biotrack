@@ -1,0 +1,1074 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+
+
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GenomicAI - Nutrition Plan</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0F172A", // Slate 900
+                        secondary: "#3B82F6", // Blue 500
+                        accent: "#F43F5E", // Rose 500
+                        "background-light": "#F1F5F9", // Slate 100
+                        "background-dark": "#0B1120",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1E293B",
+                        "nutri-green": "#10B981", // Emerald 500
+                        "nutri-orange": "#F97316", // Orange 500
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                        '3xl': '2rem',
+                        '4xl': '2.5rem',
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
+                        'glow': '0 0 20px rgba(59, 130, 246, 0.5)',
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                    }
+                },
+            },
+        };
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body
+    class="font-body bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 transition-colors duration-300 antialiased h-screen overflow-hidden">
+    <div class="flex h-full p-2 lg:p-4 gap-2 lg:gap-4 flex-col lg:flex-row overflow-hidden relative">
+        <!-- Overlay for Mobile Menu -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-30 hidden lg:hidden"
+            onclick="toggleSidebar()"></div>
+
+        <aside id="mainSidebar"
+            class="fixed inset-y-0 left-0 w-72 lg:relative lg:flex lg:w-72 flex-col justify-between rounded-r-3xl lg:rounded-3xl bg-surface-light dark:bg-surface-dark shadow-soft z-40 overflow-hidden border-r lg:border border-slate-100 dark:border-slate-800 transition-transform duration-300 -translate-x-full lg:translate-x-0">
+            <div class="p-6 lg:p-8 flex-1">
+                <div class="flex items-center justify-between mb-12">
+                    <a href="home.html" class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-slate-900/20">
+                            <span class="material-symbols-outlined text-2xl">medical_services</span>
+                        </div>
+                        <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Bio<span
+                                class="font-normal text-slate-500">Track</span></span>
+                    </a>
+                </div>
+                <nav class="space-y-2">
+                    <p class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Main Menu</p>
+                    <a class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all group"
+                        href="dashboard.html">
+                        <span
+                            class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+                        <span class="font-medium">Dashboard</span>
+                    </a>
+                    <a class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all group"
+                        href="reports.html">
+                        <span
+                            class="material-symbols-outlined group-hover:scale-110 transition-transform">folder_open</span>
+                        <span class="font-medium">Reports</span>
+                    </a>
+                    <a class="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-slate-900 text-white shadow-lg shadow-slate-900/20 transition-all group"
+                        href="nutritions.html">
+                        <span
+                            class="material-symbols-outlined group-hover:scale-110 transition-transform">restaurant</span>
+                        <span class="font-medium">Nutrition</span>
+                    </a>
+                    <a class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-all group"
+                        href="analytics.html">
+                        <span
+                            class="material-symbols-outlined group-hover:scale-110 transition-transform">analytics</span>
+                        <span class="font-medium">Analytics</span>
+                    </a>
+                </nav>
+                <!-- Logout Button -->
+                <div class="mt-auto pt-8">
+                    <button id="logoutBtn"
+                        class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-rose-500 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-900/10 transition-all group">
+                        <span class="material-symbols-outlined group-hover:scale-110 transition-transform">logout</span>
+                        <span class="font-medium">Sign Out</span>
+                    </button>
+                </div>
+            </div>
+            <div
+                class="p-6 m-4 mt-0 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm shadow-sm"
+                        id="userInitial">
+                        U
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="font-bold text-slate-900 dark:text-white truncate" id="userFullName">User Profile
+                        </p>
+                        <p class="text-xs text-slate-500 truncate" id="userPlanType">Standard Plan</p>
+                    </div>
+                </div>
+        </aside>
+        <main
+            class="flex-1 flex flex-col h-full overflow-hidden rounded-3xl bg-white dark:bg-slate-900 shadow-soft border border-slate-100 dark:border-slate-800 relative">
+            <div
+                class="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-green-50 to-transparent dark:from-emerald-900/20 dark:to-transparent rounded-full blur-3xl opacity-60 pointer-events-none -translate-y-1/2 translate-x-1/3 z-0">
+            </div>
+            <header
+                class="h-16 lg:h-20 flex items-center justify-between px-4 lg:px-8 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 border-b border-slate-100 dark:border-slate-800">
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleSidebar()"
+                        class="lg:hidden p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                        <span class="material-symbols-outlined text-2xl">menu</span>
+                    </button>
+                    <div>
+                        <p class="text-[10px] lg:text-sm text-slate-500 font-medium" id="headerDate">--</p>
+                        <h2 class="text-sm lg:text-lg font-bold text-slate-900 dark:text-white">Nutrition Plan</h2>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-full">
+                        <button onclick="location.reload()"
+                            class="px-4 py-1.5 rounded-full bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm font-semibold shadow-sm">Daily
+                            View</button>
+                        <button onclick="window.print()"
+                            class="px-4 py-1.5 rounded-full text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-slate-700">Export
+                            Plan</button>
+                    </div>
+                    <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2 hidden md:block"></div>
+                    <button
+                        onclick="document.getElementById('shopping-list-container').scrollIntoView({behavior: 'smooth'})"
+                        class="relative text-slate-500 hover:text-slate-900 transition-colors">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span
+                            class="absolute top-0 right-0 w-2 h-2 bg-emerald-500 rounded-full border border-white"></span>
+                    </button>
+                    <button onclick="logMeal()"
+                        class="flex items-center gap-2 bg-emerald-600 text-white dark:bg-emerald-500 pl-4 pr-5 py-2.5 rounded-full font-medium text-sm hover:shadow-lg hover:shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95">
+                        <span class="material-symbols-outlined text-lg">add</span>
+                        <span>Log Meal</span>
+                    </button>
+                </div>
+            </header>
+            <div class="flex-1 overflow-y-auto p-4 lg:p-8 space-y-6 lg:space-y-8 z-10 scroll-smooth">
+                <!-- AI Meal Plan Section -->
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-[2.5rem] p-8 shadow-soft border border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center">
+                                <span class="material-symbols-outlined">calendar_today</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-900 dark:text-white" id="plan-type-display">
+                                    Balanced Plan</h3>
+                                <p class="text-sm text-slate-500">AI-Generated Daily Schedule</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2" id="diet-plan-tags">
+                            <!-- Tags added dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="planned-meals-container">
+                        <!-- Planned meals injected here -->
+                    </div>
+                </div>
+
+                <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] p-6 relative overflow-hidden">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Total Calories</p>
+                                <h3 class="text-3xl font-bold text-slate-900 dark:text-white"><span
+                                        id="total-calories-display">--</span> <span
+                                        class="text-lg font-medium text-slate-400">/ <span
+                                            id="calorie-goal-display">--</span></span></h3>
+                            </div>
+                            <div
+                                class="w-10 h-10 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-sm">
+                                <span class="material-symbols-outlined">local_fire_department</span>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span id="protein-text" class="text-slate-600 dark:text-slate-300">Protein
+                                        (--g)</span>
+                                    <span class="text-blue-600">--%</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                                    <div id="protein-progress" class="bg-blue-500 h-2 rounded-full" style="width: 0%">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span id="carbs-text" class="text-slate-600 dark:text-slate-300">Carbs (--g)</span>
+                                    <span class="text-amber-500">--%</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                                    <div id="carbs-progress" class="bg-amber-500 h-2 rounded-full" style="width: 0%">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span id="fats-text" class="text-slate-600 dark:text-slate-300">Fats (--g)</span>
+                                    <span class="text-rose-500">--%</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                                    <div id="fats-progress" class="bg-rose-500 h-2 rounded-full" style="width: 0%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-blue-50 dark:bg-blue-900/20 rounded-[2rem] p-6 relative overflow-hidden flex flex-col justify-between">
+                        <div
+                            class="absolute -right-10 -top-10 w-40 h-40 bg-blue-200 dark:bg-blue-800 rounded-full blur-3xl opacity-50">
+                        </div>
+                        <div class="relative z-10 flex justify-between items-start">
+                            <div>
+                                <p class="text-sm text-blue-600 dark:text-blue-300 font-medium">Hydration</p>
+                                <h3 class="text-3xl font-bold text-slate-900 dark:text-white"><span
+                                        id="hydration-display">--</span> <span
+                                        class="text-lg font-medium text-slate-400">ml</span></h3>
+                            </div>
+                            <button onclick="logWater()"
+                                class="w-10 h-10 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center text-blue-500 hover:scale-110 transition-transform shadow-sm">
+                                <span class="material-symbols-outlined">add</span>
+                            </button>
+                        </div>
+                        <div class="relative z-10 flex items-end gap-1 h-20 mt-4">
+                            <div class="flex-1 bg-blue-200 dark:bg-blue-800 rounded-t-lg h-[40%]"></div>
+                            <div class="flex-1 bg-blue-200 dark:bg-blue-800 rounded-t-lg h-[60%]"></div>
+                            <div class="flex-1 bg-blue-200 dark:bg-blue-800 rounded-t-lg h-[30%]"></div>
+                            <div class="flex-1 bg-blue-200 dark:bg-blue-800 rounded-t-lg h-[80%]"></div>
+                            <div class="flex-1 bg-blue-500 rounded-t-lg h-[50%] shadow-lg shadow-blue-500/20"></div>
+                            <div class="flex-1 bg-blue-100 dark:bg-blue-900/50 rounded-t-lg h-[10%]"></div>
+                        </div>
+                    </div>
+                    <div onclick="viewNextMeal()"
+                        class="bg-emerald-50 dark:bg-emerald-900/20 rounded-[2rem] p-6 relative overflow-hidden group cursor-pointer hover:shadow-lg hover:shadow-emerald-500/10 transition-all border border-transparent hover:border-emerald-200">
+                        <div
+                            class="absolute -right-10 -bottom-10 w-40 h-40 bg-emerald-200 dark:bg-emerald-800 rounded-full blur-3xl opacity-50">
+                        </div>
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-4">
+                                <span id="next-meal-time"
+                                    class="bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Next
+                                    Meal</span>
+                                <span class="material-symbols-outlined text-emerald-600">timer</span>
+                            </div>
+                            <div class="flex gap-4">
+                                <div id="next-meal-icon"
+                                    class="w-20 h-20 rounded-2xl bg-emerald-200 flex items-center justify-center text-emerald-600">
+                                    <span class="material-symbols-outlined text-4xl">restaurant</span>
+                                </div>
+                                <div>
+                                    <h4 id="next-meal-name"
+                                        class="font-bold text-slate-900 dark:text-white text-lg leading-tight mb-1">
+                                        Loading...</h4>
+                                    <p id="next-meal-meta" class="text-xs text-slate-500 font-medium mb-2">--</p>
+                                    <div
+                                        class="flex items-center gap-1 text-emerald-700 dark:text-emerald-400 text-sm font-semibold group-hover:gap-2 transition-all">
+                                        View Details <span
+                                            class="material-symbols-outlined text-sm">arrow_forward</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-8 space-y-6">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Today's Meals</h3>
+
+                        </div>
+                        <div id="meal-list" class="space-y-4">
+                            <p class="text-center text-slate-500 py-10">Loading meals...</p>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 space-y-6">
+                        <div
+                            class="bg-white dark:bg-slate-800 rounded-[2rem] p-6 border border-slate-100 dark:border-slate-700 shadow-sm h-auto">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="font-bold text-slate-900 dark:text-white">Shopping List</h3>
+                                <button onclick="viewFullShoppingList()"
+                                    class="text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1.5 rounded-lg hover:bg-emerald-100">See
+                                    All</button>
+                            </div>
+                            <div id="shopping-list-container" class="space-y-3">
+                                <!-- Dynamic Content -->
+                                <p class="text-slate-400 text-sm">Loading list...</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900 text-white rounded-[2rem] p-6 shadow-xl relative overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 w-32 h-32 bg-emerald-500 rounded-full blur-[60px] opacity-20">
+                            </div>
+                            <div class="relative z-10">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="font-bold mb-1">Protein Tracker</h3>
+                                        <p class="text-xs text-slate-400">Daily Goal: 150g</p>
+                                    </div>
+                                    <button onclick="logMeal()"
+                                        class="bg-emerald-500 hover:bg-emerald-400 text-white p-2 rounded-xl shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
+                                        title="Log Protein Source">
+                                        <span class="material-symbols-outlined text-xl">egg_alt</span>
+                                    </button>
+                                </div>
+                                <div class="flex items-end justify-between gap-2 h-32" id="hydration-bar-container">
+                                    <!-- Dynamic Content -->
+                                    <div class="w-full h-full flex items-center justify-center text-slate-500 text-xs">
+                                        Loading...</div>
+                                </div>
+                                <div id="hydration-labels"
+                                    class="flex justify-between text-[10px] text-slate-400 mt-2 font-medium uppercase">
+                                    <!-- Dynamic Labels -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="mt-4">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6">Chef AI Suggestions</h3>
+                    <div id="chef-ai-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Dynamic Content Will Be Injected Here -->
+                        <div
+                            class="col-span-full text-center py-12 text-slate-400 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-dashed border-slate-200 dark:border-slate-700">
+                            <span class="material-symbols-outlined text-4xl mb-2">restaurant_menu</span>
+                            <p>Upload a medical report to unlock AI Chef suggestions.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Log Meal Modal -->
+    <div id="logMealModal"
+        class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div
+            class="bg-white dark:bg-slate-800 rounded-[2rem] w-full max-w-md shadow-2xl overflow-hidden border border-slate-100 dark:border-slate-700">
+            <div
+                class="p-6 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Log a Meal</h3>
+                <button onclick="closeLogMealModal()" class="text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Meal Name</label>
+                    <div class="flex gap-2">
+                        <input id="mealNameInput" type="text" placeholder="e.g. Grilled Chicken Salad"
+                            class="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-emerald-500 focus:border-emerald-500 dark:text-white" />
+                        <button onclick="autoMeasure()"
+                            class="px-4 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-xl font-bold text-xs whitespace-nowrap hover:bg-emerald-200 transition-colors">
+                            Auto-Measure 🪄
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label
+                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Calories</label>
+                        <input id="mealCalsInput" type="number" placeholder="kcal"
+                            class="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-emerald-500 focus:border-emerald-500 dark:text-white" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Protein
+                            (g)</label>
+                        <input id="mealProteinInput" type="number" placeholder="Optional"
+                            class="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-emerald-500 focus:border-emerald-500 dark:text-white" />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Carbs
+                            (g)</label>
+                        <input id="mealCarbsInput" type="number" placeholder="Optional"
+                            class="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-emerald-500 focus:border-emerald-500 dark:text-white" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Fats
+                            (g)</label>
+                        <input id="mealFatsInput" type="number" placeholder="Optional"
+                            class="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-emerald-500 focus:border-emerald-500 dark:text-white" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 pt-0">
+                <button onclick="submitMeal()"
+                    class="w-full py-3 rounded-xl bg-emerald-600 text-white font-bold shadow-lg shadow-emerald-500/20 hover:bg-emerald-700 transition-all active:scale-95">
+                    Save Meal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase and Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Sidebar Toggle
+        window.toggleSidebar = function () {
+            const sidebar = document.getElementById('mainSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar && overlay) {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            }
+        };
+
+        // Date Display
+        const dateEl = document.getElementById('headerDate');
+        if (dateEl) {
+            const options = { weekday: 'long', month: 'long', day: 'numeric' };
+            dateEl.innerText = new Date().toLocaleDateString(undefined, options);
+        }
+
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        async function fetchUserData() {
+            try {
+                const res = await fetch('http://localhost:8080/users/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const user = await res.json();
+
+                    // Update Sidebar Profile
+                    const nameEl = document.getElementById('userFullName');
+                    if (nameEl) nameEl.innerText = user.full_name;
+
+                    const initialEl = document.getElementById('userInitial');
+                    if (initialEl) initialEl.innerText = user.full_name.charAt(0).toUpperCase();
+
+                    const planEl = document.getElementById('userPlanType');
+                    if (planEl) planEl.innerText = user.role === 'patient' ? 'Premium Plan' : 'Standard Plan';
+
+                    document.querySelectorAll('p.font-bold, h1, h2').forEach(el => {
+                        if (el.innerText.includes('Jane Doe') || el.innerText === 'Jane Doe') {
+                            el.innerText = user.full_name;
+                        }
+                    });
+
+                    // Update Header Greeting
+                    const headerGreeting = document.querySelector('header h2');
+                    if (headerGreeting) {
+                        headerGreeting.innerText = `Nutrition Plan for ${user.full_name.split(' ')[0]}`;
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch user data", err);
+            }
+        }
+
+        async function fetchDailyNutrition() {
+            if (!token) return;
+            try {
+                // 1. Fetch Goals & Recommendations (from Report)
+                const planRes = await fetch('http://localhost:8080/nutrition/daily-plan', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                // 2. Fetch Actual Progress (Logged Meals)
+                const summaryRes = await fetch('http://localhost:8080/nutrition/summary', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                // 3. Fetch Meal List
+                const mealsRes = await fetch('http://localhost:8080/nutrition/meals', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (planRes.ok && summaryRes.ok && mealsRes.ok) {
+                    const planData = await planRes.json();
+                    const summaryData = await summaryRes.json();
+                    const mealsData = await mealsRes.json();
+
+                    // Combine data for the update function
+                    // We use the Report's diet plan as the "base" structure
+                    let combinedPlan = planData.diet_plan || {};
+
+                    // Inject REAL actuals
+                    combinedPlan.actuals = summaryData;
+                    combinedPlan.logged_meals = mealsData;
+
+                    updateNutritionDashboard(combinedPlan);
+                }
+            } catch (err) {
+                console.error("Failed to fetch nutrition context", err);
+            }
+        }
+
+        function updateNutritionDashboard(plan) {
+            if (!plan) return;
+
+            // 1. Update Calories & Macros
+            // 1. Update Calories & Macros
+            if (plan.macros) {
+                const macros = plan.macros;
+                const actuals = plan.actuals || { total_calories: 0, total_protein: 0, total_carbs: 0, total_fats: 0 };
+
+                // Calories
+                document.getElementById('total-calories-display').innerText = actuals.total_calories.toLocaleString();
+                document.getElementById('calorie-goal-display').innerText = macros.calories.toLocaleString();
+
+                // Macros - Protein
+                const pGoal = macros.protein;
+                const pCurrent = actuals.total_protein;
+                const pLeft = Math.max(0, pGoal - pCurrent);
+                const pPct = Math.min(100, (pCurrent / pGoal) * 100);
+
+                document.getElementById('protein-text').innerText = `Protein (${pLeft}g left)`;
+                document.getElementById('protein-progress').style.width = `${pPct}%`;
+
+                // Macros - Carbs
+                const cGoal = macros.carbs;
+                const cCurrent = actuals.total_carbs;
+                const cLeft = Math.max(0, cGoal - cCurrent);
+                const cPct = Math.min(100, (cCurrent / cGoal) * 100);
+
+                document.getElementById('carbs-text').innerText = `Carbs (${cLeft}g left)`;
+                document.getElementById('carbs-progress').style.width = `${cPct}%`;
+
+                // Macros - Fats
+                const fGoal = macros.fats;
+                const fCurrent = actuals.total_fats;
+                const fLeft = Math.max(0, fGoal - fCurrent);
+                const fPct = Math.min(100, (fCurrent / fGoal) * 100);
+
+                document.getElementById('fats-text').innerText = `Fats (${fLeft}g left)`;
+                document.getElementById('fats-progress').style.width = `${fPct}%`;
+
+                // Hydration Text (Blue Card)
+                if (macros.hydration) {
+                    const hydroEl = document.getElementById('hydration-display');
+                    const waterTotal = actuals.total_water_ml || 0;
+                    if (hydroEl) hydroEl.innerText = waterTotal.toLocaleString();
+
+                    // Update Green Graph (Today's Bar)
+                    const hydroBar = document.getElementById('today-hydro-bar');
+                    const hydroTooltip = document.getElementById('today-hydro-tooltip');
+                    if (hydroBar && hydroTooltip) {
+                        const pct = Math.min(100, (waterTotal / macros.hydration) * 100);
+                        hydroBar.style.height = `${pct}%`;
+                        hydroTooltip.innerText = `${waterTotal}ml`;
+                    }
+                }
+            }
+
+            // 1.5b Update "Next Meal" Card (New Logic)
+            const nextMealName = document.getElementById('next-meal-name');
+            const nextMealMeta = document.getElementById('next-meal-meta');
+            const nextMealTime = document.getElementById('next-meal-time');
+
+            if (nextMealName && plan.meals && plan.meals.length > 0) {
+                // For MVP, pick the first scheduled meal
+                const next = plan.meals[0];
+                nextMealName.innerText = next.name;
+                nextMealMeta.innerText = `${next.calories} kcal • Optimized`;
+                if (nextMealTime) nextMealTime.innerText = `Next Meal • ${next.time}`;
+
+                // Store for modal
+                window.currentNextMeal = next;
+            } else if (nextMealName) {
+                nextMealName.innerText = "No Meal Planned";
+                nextMealMeta.innerText = "Relax & Hydrate";
+            }
+
+            // 1.5 Update Suggestions (New)
+            if (plan.recommendations) {
+                const recsContainer = document.getElementById('chef-ai-container');
+                if (recsContainer) {
+                    recsContainer.innerHTML = plan.recommendations.map((rec, i) => `
+    <div onclick='showSuggestion("${rec.replace(/'/g, "&apos;").replace(/"/g, "&quot;")}", ${i + 1})'
+        class="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-100 dark:border-slate-700 hover:shadow-lg hover:border-emerald-500/50 hover:-translate-y-1 transition-all group cursor-pointer active:scale-95">
+        <div
+            class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined">restaurant_menu</span>
+        </div>
+        <h4 class="font-bold text-slate-900 dark:text-white mb-2 group-hover:text-emerald-600 transition-colors">AI Suggestion #${i + 1}</h4>
+        <p class="text-sm text-slate-500 leading-relaxed line-clamp-3">${rec}</p>
+        <div class="mt-4 flex items-center gap-2 text-xs font-bold text-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity">
+            Read More <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </div>
+    </div>
+    `).join('');
+                }
+            }
+
+            // 1.6 Update Planned Meals (The Top "Calendar") section
+            const planContainer = document.getElementById('planned-meals-container');
+            const planTypeDisplay = document.getElementById('plan-type-display');
+
+            if (plan.diet_type && planTypeDisplay) {
+                planTypeDisplay.innerText = plan.diet_type;
+            }
+
+            if (planContainer && plan.meals && plan.meals.length > 0) {
+                planContainer.innerHTML = plan.meals.map((meal, i) => {
+                    const icons = { 'Breakfast': 'bakery_dining', 'Lunch': 'soup_kitchen', 'Snack': 'nutrition', 'Dinner': 'dinner_dining' };
+                    const colors = { 'Breakfast': 'orange', 'Lunch': 'blue', 'Snack': 'purple', 'Dinner': 'emerald' };
+
+                    return `
+                   <div class="bg-slate-50 dark:bg-slate-700/30 p-4 rounded-3xl border border-slate-100 dark:border-slate-700 relative group overflow-hidden">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-${colors[meal.time] || 'blue'}-500/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-${colors[meal.time] || 'blue'}-500/20 transition-colors"></div>
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-xs font-bold text-${colors[meal.time] || 'blue'}-500 uppercase tracking-wide bg-${colors[meal.time] || 'blue'}-50 dark:bg-${colors[meal.time] || 'blue'}-900/20 px-2 py-1 rounded-lg">${meal.time}</span>
+                                <span class="material-symbols-outlined text-slate-400 text-lg">${icons[meal.time] || 'restaurant'}</span>
+                            </div>
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-1 line-clamp-1">${meal.name}</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3 line-clamp-2 min-h-[2.5em]">${meal.desc}</p>
+                            <div class="flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300">
+                                <span class="material-symbols-outlined text-sm">local_fire_department</span>
+                                ${meal.calories} kcal
+                            </div>
+                        </div>
+                   </div>
+                   `;
+                }).join('');
+            } else if (planContainer) {
+                planContainer.innerHTML = `<div class="col-span-full text-center text-slate-500 italic py-4">No specific meals planned yet. Upload a report to generate.</div>`;
+            }
+
+            // 2. Update Meals List
+            const mealList = document.getElementById('meal-list');
+            // Prioritize logged meals if available, otherwise show empty state or recommendations
+            const mealsToShow = (plan.logged_meals && plan.logged_meals.length > 0) ? plan.logged_meals : [];
+            // Don't show recommendations as "Today's Meals" strictly, or label them differently.
+
+            if (mealList) {
+                if (mealsToShow.length === 0) {
+                    mealList.innerHTML = `<div class="p-8 text-center text-slate-400">No meals logged today yet.</div>`;
+                } else {
+                    mealList.innerHTML = mealsToShow.map((meal, index) => {
+                        const icons = ['egg_alt', 'set_meal', 'soup_kitchen', 'local_cafe'];
+                        const colors = ['orange', 'blue', 'purple', 'emerald'];
+
+                        // Logged meals have: name, calories, protein, carbs, fats, created_at
+                        const time = new Date(meal.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                        return `
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-700 flex items-center gap-4 hover:border-emerald-200 transition-colors">
+        <div class="w-12 h-12 rounded-xl bg-${colors[index % 4]}-50 dark:bg-${colors[index % 4]}-900/20 flex items-center justify-center flex-shrink-0 text-${colors[index % 4]}-500">
+            <span class="material-symbols-outlined">${icons[index % 4]}</span>
+        </div>
+        <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-center mb-1">
+                <h4 class="font-bold text-slate-900 dark:text-white truncate">${meal.name}</h4>
+                <span class="font-bold text-slate-900 dark:text-white text-sm whitespace-nowrap">${meal.calories} kcal</span>
+            </div>
+            <div class="flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
+                <span class="truncate">Meal ${index + 1} • ${time}</span>
+                <span class="truncate pl-2">${meal.protein}g P • ${meal.carbs}g C • ${meal.fats}g F</span>
+            </div>
+        </div>
+    </div>
+    `;
+                    }).join('');
+                }
+            }
+
+            // 3. Update Shopping List
+            const shopList = document.getElementById('shopping-list-container');
+            if (shopList && plan.shopping_list) {
+                const checkedItems = JSON.parse(localStorage.getItem('checked_shopping_items') || '[]');
+                shopList.innerHTML = plan.shopping_list.map((item, i) => {
+                    const isChecked = checkedItems.includes(item);
+                    // Classes based on state
+                    const boxClasses = isChecked
+                        ? 'border-emerald-500 bg-emerald-50'
+                        : 'border-slate-300 group-hover:border-emerald-500';
+
+                    // Logic for checkmark: 
+                    // Checked: block
+                    // Unchecked: hidden (but block on hover)
+                    const checkClasses = isChecked
+                        ? 'block'
+                        : 'hidden group-hover:block';
+
+                    const textClasses = isChecked
+                        ? 'line-through text-slate-400'
+                        : 'text-slate-600 dark:text-slate-300';
+
+                    return `
+    <div class="flex items-center gap-3 group" onclick="toggleShopItem(this)">
+        <div
+            class="w-5 h-5 rounded border-2 ${boxClasses} flex items-center justify-center cursor-pointer transition-colors">
+            <span class="${checkClasses} w-3 h-3 bg-emerald-500 rounded-sm"></span>
+        </div>
+        <span class="text-sm ${textClasses} transition-colors cursor-pointer">${item}</span>
+    </div>
+    `;
+                }).join('');
+            }
+
+            // 4. Update "Next Meal" preview (Use first meal)
+            if (plan.meals && plan.meals.length > 0) {
+                const next = plan.meals[0]; // Simple logic: first meal is "next"
+
+                const timeEl = document.getElementById('next-meal-time');
+                if (timeEl) timeEl.innerText = `Next Meal • ${next.time} `;
+
+                const nameEl = document.getElementById('next-meal-name');
+                if (nameEl) nameEl.innerText = next.name;
+
+                const metaEl = document.getElementById('next-meal-meta');
+                if (metaEl) metaEl.innerText = `${next.calories} kcal • Optimized`;
+            } else {
+                const nameEl = document.getElementById('next-meal-name');
+                if (nameEl) nameEl.innerText = "No meals planned";
+            }
+        }
+
+        fetchUserData();
+        fetchDailyNutrition();
+        fetchProteinHistory();
+
+        // Logout functionality
+        document.querySelectorAll('button, div, span').forEach(el => {
+            if (el.innerText.trim() === 'Logout' || el.innerText.trim() === 'Sign Out') {
+                el.onclick = () => {
+                    localStorage.removeItem('auth_token');
+                    window.location.href = 'home.html';
+                };
+                el.style.cursor = 'pointer';
+            }
+        });
+        // Interactions
+        function addHydration() {
+            const el = document.getElementById('hydration-display');
+            if (el) {
+                let current = parseInt(el.innerText.replace(/,/g, '')) || 0;
+                current += 250;
+                el.innerText = current.toLocaleString();
+            }
+        }
+
+        window.toggleMeal = function (btn) {
+            btn.classList.toggle('bg-emerald-500');
+            btn.classList.toggle('text-white');
+            btn.classList.toggle('border-emerald-500');
+            btn.classList.toggle('text-slate-300'); // toggle off default
+            const icon = btn.querySelector('span');
+            // Animate
+            icon.style.transform = 'scale(1.2)';
+            setTimeout(() => icon.style.transform = 'scale(1)', 200);
+        }
+
+        window.toggleShopItem = function (row) {
+            const box = row.querySelector('div');
+            // We search for the span that represents the checkmark (it has w-3 h-3)
+            const check = box.querySelector('span');
+            const text = row.querySelector('span.text-sm');
+            const itemName = text.innerText;
+
+            const checkedItems = JSON.parse(localStorage.getItem('checked_shopping_items') || '[]');
+            const index = checkedItems.indexOf(itemName);
+
+            if (index === -1) {
+                // Mark as checked
+                checkedItems.push(itemName);
+
+                check.classList.remove('hidden', 'group-hover:block');
+                check.classList.add('block');
+
+                box.classList.remove('border-slate-300', 'group-hover:border-emerald-500');
+                box.classList.add('border-emerald-500', 'bg-emerald-50');
+
+                text.classList.remove('text-slate-600', 'dark:text-slate-300');
+                text.classList.add('line-through', 'text-slate-400');
+            } else {
+                // Uncheck
+                checkedItems.splice(index, 1);
+
+                check.classList.remove('block');
+                check.classList.add('hidden', 'group-hover:block');
+
+                box.classList.remove('border-emerald-500', 'bg-emerald-50');
+                box.classList.add('border-slate-300', 'group-hover:border-emerald-500');
+
+                text.classList.remove('line-through', 'text-slate-400');
+                text.classList.add('text-slate-600', 'dark:text-slate-300');
+            }
+            localStorage.setItem('checked_shopping_items', JSON.stringify(checkedItems));
+        };
+
+        function logMeal() {
+            document.getElementById('logMealModal').classList.remove('hidden');
+        }
+
+        function closeLogMealModal() {
+            document.getElementById('logMealModal').classList.add('hidden');
+            // Clear inputs
+            document.getElementById('mealNameInput').value = '';
+            document.getElementById('mealCalsInput').value = '';
+            document.getElementById('mealProteinInput').value = '';
+            document.getElementById('mealCarbsInput').value = '';
+            document.getElementById('mealFatsInput').value = '';
+        }
+
+        async function submitMeal() {
+            if (!token) return;
+            const name = document.getElementById('mealNameInput').value;
+            const calories = document.getElementById('mealCalsInput').value;
+            const protein = document.getElementById('mealProteinInput').value || 0;
+            const carbs = document.getElementById('mealCarbsInput').value || 0;
+            const fats = document.getElementById('mealFatsInput').value || 0;
+
+            if (!name || !calories) {
+                alert("Please enter at least a name and calories.");
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:8080/nutrition/meals', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token} `,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name,
+                        calories: parseInt(calories),
+                        protein: parseInt(protein),
+                        carbs: parseInt(carbs),
+                        fats: parseInt(fats)
+                    })
+                });
+
+                if (res.ok) {
+                    closeLogMealModal();
+                    fetchDailyNutrition(); // Refresh
+                } else {
+                    alert("Failed to log meal");
+                }
+            } catch (err) {
+                console.error("Error logging meal", err);
+            }
+        }
+
+        window.showSuggestion = function (text, index) {
+            const modal = document.getElementById('suggestionModal');
+            const title = document.getElementById('suggestionModalTitle');
+            const content = document.getElementById('suggestionModalContent');
+
+            if (modal && title && content) {
+                title.innerText = `AI Suggestion #${index} `;
+                content.innerText = text;
+                modal.classList.remove('hidden');
+            }
+        };
+
+        async function fetchProteinHistory() {
+            if (!token) {
+                console.warn("No token found for protein history");
+                return;
+            }
+            try {
+                const res = await fetch('http://localhost:8080/nutrition/protein/history', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const history = await res.json();
+                    renderProteinGraph(history);
+                } else {
+                    const el = document.querySelector('#hydration-bar-container div');
+                    if (el) el.innerText = `Server Error: ${res.status}`;
+                }
+            } catch (e) {
+                console.error("Protein history error", e);
+                const el = document.querySelector('#hydration-bar-container div');
+                if (el) el.innerText = "Connection Failed";
+            }
+        }
+
+        function renderProteinGraph(history) {
+            const container = document.getElementById('hydration-bar-container');
+            const labelContainer = document.getElementById('hydration-labels');
+
+            if (!container) return;
+
+            // Render Bars
+            container.innerHTML = history.map(day => `
+                <div class="w-full bg-slate-800 rounded-t-lg relative group flex flex-col justify-end h-full">
+                     <div class="w-full ${day.label === 'TODAY' ? 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]' : 'bg-slate-700'} rounded-t-lg transition-all duration-500"
+                          style="height: ${day.pct}%"></div>
+                     <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
+                         ${day.amount}g
+                     </div>
+                </div>
+            `).join('');
+
+            // Render Labels
+            if (labelContainer) {
+                labelContainer.innerHTML = history.map(day => `
+                    <span class="${day.label === 'TODAY' ? 'text-emerald-500 font-bold' : ''}">${day.label}</span>
+                `).join('');
+            }
+        }
+
+        window.closeSuggestionModal = function () {
+            const modal = document.getElementById('suggestionModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.viewFullShoppingList = function () {
+            const items = Array.from(document.querySelectorAll('#shopping-list-container span.text-sm')).map(el => el.innerText);
+            if (items.length === 0) return alert("List is empty");
+            alert("Full Shopping List:\n\n" + items.join("\n"));
+            // Ideally we would show a nice modal, but for "See All" functionality in this context, a simple list view is a good start if a dedicated page doesn't exist.
+        };
+
+        window.logWater = async function () {
+            if (!token) return alert("Please sign in first!"); // Feedback
+            const btn = document.querySelector('button[onclick="logWater()"]');
+
+            // Visual feedback
+            const originalIcon = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span>';
+
+            try {
+                const res = await fetch('http://localhost:8080/nutrition/water', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ amount_ml: 250 })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    // Alert is annoying, maybe just a toast? For now, standard alert is fine as requested.
+                    // But let's verify by refreshing data primarily.
+                    await fetchDailyNutrition();
+                    fetchProteinHistory();
+                } else {
+                    alert("Failed to log water. Server Error.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Connection Error");
+            } finally {
+                btn.innerHTML = originalIcon;
+            }
+        };
+
+        window.autoMeasure = async function () {
+            const query = document.getElementById('mealNameInput').value;
+            if (!query) return alert("Enter a meal name first!");
+
+            const btn = document.querySelector('button[onclick="autoMeasure()"]');
+            btn.innerText = "Measuring...";
+
+            try {
+                const res = await fetch('http://localhost:8080/nutrition/estimate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('mealCalsInput').value = data.calories;
+                    document.getElementById('mealProteinInput').value = data.protein;
+                    document.getElementById('mealCarbsInput').value = data.carbs;
+                    document.getElementById('mealFatsInput').value = data.fats;
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Could not estimate.");
+            } finally {
+                btn.innerHTML = "Auto-Measure 🪄";
+            }
+        };
+
+        window.viewNextMeal = function () {
+            if (!window.currentNextMeal) {
+                return alert("No upcoming meal details available.");
+            }
+            const meal = window.currentNextMeal;
+            const modal = document.getElementById('suggestionModal');
+            const title = document.getElementById('suggestionModalTitle');
+            const content = document.getElementById('suggestionModalContent');
+
+            if (modal && title && content) {
+                title.innerText = `${meal.name} (${meal.calories} kcal)`;
+                content.innerText = `${meal.desc || 'Optimized Meal Plan'}\n\nNutrients:\nProtein: ${meal.protein || 0}g\nCarbs: ${meal.carbs || 0}g\nFats: ${meal.fats || 0}g\n\nTime: ${meal.time}`;
+                modal.classList.remove('hidden');
+            } else {
+                alert(`${meal.name}\n${meal.desc}`);
+            }
+        };
+
+        // Expose functions to window
+        window.logMeal = logMeal;
+        window.closeLogMealModal = closeLogMealModal;
+        window.submitMeal = submitMeal;
+        window.addHydration = window.logWater; // Alias just in case
+    </script>
+
+    <!-- Suggestion Modal -->
+    <div id="suggestionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-6 w-11/12 md:w-1/2 lg:w-1/3 relative">
+            <h3 id="suggestionModalTitle" class="text-xl font-bold text-slate-900 dark:text-white mb-4">AI Suggestion
+            </h3>
+            <p id="suggestionModalContent" class="text-slate-700 dark:text-slate-300 mb-6"></p>
+            <button onclick="closeSuggestionModal()"
+                class="absolute top-4 right-4 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            <div class="flex justify-end">
+                <button onclick="closeSuggestionModal()"
+                    class="px-4 py-2 bg-emerald-500 text-white rounded-md hover:bg-emerald-600 transition-colors">
+                    Got it!
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+```

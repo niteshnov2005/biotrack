@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>BioTrack - Personalized Medical Nutrition</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0F172A",
+                        secondary: "#3B82F6",
+                        accent: "#F43F5E",
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#0B1120",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1E293B",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                        '3xl': '2rem',
+                        '4xl': '2.5rem',
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
+                        'glow': '0 0 20px rgba(59, 130, 246, 0.5)',
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'fade-in-up-delay-1': 'fadeInUp 0.8s ease-out 0.2s forwards',
+                        'fade-in-up-delay-2': 'fadeInUp 0.8s ease-out 0.4s forwards',
+                        'fade-in-up-delay-3': 'fadeInUp 0.8s ease-out 0.6s forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'blob-pulse': 'blobPulse 10s infinite alternate',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        blobPulse: {
+                            '0%': { transform: 'scale(1) translate(0, 0)' },
+                            '100%': { transform: 'scale(1.1) translate(20px, -20px)' },
+                        }
+                    }
+                },
+            },
+        };
+    </script>
+    <style>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+        }
+
+        .dark .glass-nav {
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid rgba(30, 41, 59, 0.6);
+        }
+
+        .hero-gradient-text {
+            background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dark .hero-gradient-text {
+            background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        .opacity-0-start {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body
+    class="font-body bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 transition-colors duration-300 antialiased min-h-screen flex flex-col">
+    <nav class="glass-nav fixed w-full z-50 top-0 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="home.html" class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-slate-900/20">
+                    <span class="material-symbols-outlined text-2xl">medical_services</span>
+                </div>
+                <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Bio<span
+                        class="font-normal text-slate-500">Track</span></span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a class="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-colors"
+                    href="#how-it-works">How It Works</a>
+                <a class="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-colors"
+                    href="#features">Features</a>
+                <a class="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-colors"
+                    href="#testimonials">Testimonials</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="login.html"
+                    class="hidden md:block text-sm font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-colors">Sign
+                    In</a>
+                <a href="signup.html"
+                    class="bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-5 py-2.5 rounded-full text-sm font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                    Get Started
+                </a>
+                <button onclick="toggleMobileMenu()"
+                    class="md:hidden p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                    <span class="material-symbols-outlined text-2xl">menu</span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobileMenu"
+            class="hidden fixed inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl z-[60] flex flex-col p-8 transition-all duration-300 opacity-0 transform scale-95 origin-top-right">
+            <div class="flex items-center justify-between mb-12">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-blue-500/20">
+                        <span class="material-symbols-outlined text-2xl">medical_services</span>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Bio<span
+                            class="text-blue-600">Track</span></span>
+                </div>
+                <button onclick="toggleMobileMenu()"
+                    class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                    <span class="material-symbols-outlined text-2xl">close</span>
+                </button>
+            </div>
+            <nav class="flex flex-col gap-6">
+                <a class="text-2xl font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    href="#how-it-works" onclick="toggleMobileMenu()">How It Works</a>
+                <a class="text-2xl font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    href="#features" onclick="toggleMobileMenu()">Features</a>
+                <a class="text-2xl font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    href="#testimonials" onclick="toggleMobileMenu()">Testimonials</a>
+                <hr class="border-slate-100 dark:border-slate-800 my-4">
+                <a class="text-xl font-bold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+                    href="login.html">Sign In</a>
+                <a class="text-xl font-bold text-blue-600 hover:text-blue-700" href="signup.html">Create Account</a>
+            </nav>
+        </div>
+    </nav>
+    <main class="flex-grow pt-32 pb-16 relative overflow-hidden">
+        <div
+            class="blob bg-blue-400 w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2 animate-blob-pulse">
+        </div>
+        <div class="blob bg-purple-400 w-96 h-96 rounded-full bottom-0 right-0 translate-x-1/3 translate-y-1/3 animate-blob-pulse"
+            style="animation-direction: reverse;"></div>
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+            <div class="space-y-8">
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 text-blue-600 dark:text-blue-300 text-xs font-semibold tracking-wide uppercase opacity-0-start animate-fade-in-up">
+                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                    AI-Powered Health Insights
+                </div>
+                <h1
+                    class="text-5xl lg:text-7xl font-bold tracking-tight leading-tight hero-gradient-text opacity-0-start animate-fade-in-up-delay-1">
+                    Turn Medical Data into <span class="text-blue-600 dark:text-blue-400">Vitality.</span>
+                </h1>
+                <p
+                    class="text-lg text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed opacity-0-start animate-fade-in-up-delay-2">
+                    Upload your medical reports and let our AI personalize your diet and protein intake. Scientifically
+                    backed recommendations tailored to your unique biology.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 opacity-0-start animate-fade-in-up-delay-3">
+                    <a href="signup.html"
+                        class="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-full font-bold shadow-lg shadow-blue-600/30 hover:bg-blue-700 hover:shadow-xl hover:scale-105 transition-all w-full sm:w-auto">
+                        Upload Your Report
+                        <span class="material-symbols-outlined">upload_file</span>
+                    </a>
+                    <a href="nutritions.html"
+                        class="flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-8 py-4 rounded-full font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all w-full sm:w-auto">
+                        View Sample Plan
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                    </a>
+                </div>
+                <div class="flex items-center gap-4 pt-4 opacity-0-start animate-fade-in-up"
+                    style="animation-delay: 0.8s;">
+                    <div class="flex -space-x-3">
+                        <img alt="User" class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGMd_V4Qz0DF94Y1kkR0qqzYcOkJpMlVAw4UJFm1uBMsYmrvChefLNSeRQ9-a7oxotIyTiZ1M77HLHh4-pNPXwF3d336a5OaSmvbP0jCd-eI5pxYoA8Nc0ezxzP3_hEZcdWGzjvLfAyvsniHKyflEBZzlCjxIEG54tOEOyBbq2r_4tTQWOKiY7RFhgN4Gu_BBoeZsxIme34fN_Ujww5EAqcmCm-4NfSN91TVfAiVtOBviYluAs7hTLPLLjbg5E00NntIaYip3Cobw" />
+                        <img alt="User" class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAj-Pw-knWvWkDy_ZRK8W2Ghip6FrVS7nCqsRtm0x7XORBMU_AZ50M0nutJ29PkrExHnDJpOhEIED-FFzSSxcGBHX3w9LagH-LiK0zoXtFgHtuYxVKRzVbmgKnacPIyUG9p1mLscj_y_38IR7qcEmpirFb1YRSbgQps_CtqXUQIi2KECSnjgmHEoa0wXQjhgiMD0cBB8J1-RZjRB5mKYrA_t5-0gV70VGg4QQXvDu93SbfDf28oxW-nK8SWBtlLUV_-VvHudrEI8eE" />
+                        <img alt="User" class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZWz-5g-PUToQM69AQfHbkygyuq1i6URoyHa9SybDFhOaY1wU12zpBH9od-T-l7RCiciuObchucrkOnAN4KtwK06lYV8NF36q5Ds_rpMVU93rXroO8D2w71qFSUGTRVury69Ozj6S_QN5SaPdbzzHxJP8Vfj5ORJP5M5ZU4xQNyCFYaWLQtpk6-vIIuqE9iNIK3l1CJclmKyQQ5P6H-Eb563cAXZ3iPLEGGxT8j-nw4kYXr4ZzZv5e6Ith-3TZGLAcge4H-SJzc7Y" />
+                    </div>
+                    <div class="text-sm">
+                        <span class="block font-bold text-slate-900 dark:text-white">Trusted by 10,000+ Patients</span>
+                        <div class="flex text-yellow-500 text-xs">
+                            <span class="material-symbols-outlined text-[16px] fill-current">star</span>
+                            <span class="material-symbols-outlined text-[16px] fill-current">star</span>
+                            <span class="material-symbols-outlined text-[16px] fill-current">star</span>
+                            <span class="material-symbols-outlined text-[16px] fill-current">star</span>
+                            <span class="material-symbols-outlined text-[16px] fill-current">star</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="relative lg:h-[600px] w-full flex items-center justify-center perspective-[2000px] animate-fade-in-up-delay-2 opacity-0-start mt-12 lg:mt-0">
+                <div
+                    class="relative lg:absolute w-full sm:w-[90%] bg-white dark:bg-slate-800 rounded-[2rem] shadow-2xl border border-slate-100 dark:border-slate-700 p-6 z-10 transform lg:rotate-y-[-5deg] lg:rotate-x-[5deg] lg:hover:rotate-0 transition-transform duration-700 ease-out lg:animate-float">
+                    <div
+                        class="flex items-center justify-between mb-6 border-b border-slate-100 dark:border-slate-700 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600">
+                                <span class="material-symbols-outlined">health_and_safety</span>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 dark:text-white">Health Score</h3>
+                                <p class="text-xs text-slate-500">Based on recent lab results</p>
+                            </div>
+                        </div>
+                        <span class="text-2xl font-bold text-emerald-500">92/100</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl flex items-center gap-4">
+                            <span class="material-symbols-outlined text-orange-500">egg_alt</span>
+                            <div class="flex-1">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="font-medium dark:text-slate-200">Protein Intake</span>
+                                    <span class="font-bold dark:text-white">102g / 140g</span>
+                                </div>
+                                <div class="h-2 bg-slate-200 dark:bg-slate-600 rounded-full overflow-hidden">
+                                    <div class="h-full bg-orange-500 w-[72%] rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl flex items-center gap-4">
+                            <span class="material-symbols-outlined text-blue-500">water_drop</span>
+                            <div class="flex-1">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="font-medium dark:text-slate-200">Hydration</span>
+                                    <span class="font-bold dark:text-white">1.8L / 2.5L</span>
+                                </div>
+                                <div class="h-2 bg-slate-200 dark:bg-slate-600 rounded-full overflow-hidden">
+                                    <div class="h-full bg-blue-500 w-[65%] rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
+                                <span
+                                    class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-sm">auto_awesome</span>
+                            </div>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">
+                                <strong>AI Suggestion:</strong> Increase Iron intake by adding spinach to your lunch to
+                                combat mild fatigue markers.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="hidden sm:block absolute -right-4 top-10 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 animate-float-delayed z-20 w-64">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600">
+                            <span class="material-symbols-outlined">check_circle</span>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase font-bold">Status</p>
+                            <p class="text-sm font-bold text-slate-900 dark:text-white">Report Analyzed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden sm:block absolute -left-8 bottom-20 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 z-20 max-w-xs animate-float"
+                    style="animation-duration: 7s;">
+                    <div class="flex gap-3 items-center">
+                        <img alt="Food" class="w-12 h-12 rounded-lg object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvWvafANKPFX3hcVL8hvLLYoNLhc6876GoZpJg-vfsV5wJYa8qu4VA87-DFXCEod1vOjmGLdBD5RssYNmKWqx7HlMbuxPNoi2mKppPEqGYHFTNVJED2JDU-v8-oahNZ6Z4E_0w4lGKjkuVe4UgJ9hrVbzUZVqY01VHwSxexp6xC6NzOIEDlsUZkkm8hk0xg4_I8ORdZr73XixGhK2Gr8IDOYuMH1Kamiq91PSZqJToVBvdOMytpMOACQNRSC4JPUNgKtUb66xCFPQ" />
+                        <div>
+                            <p class="text-xs font-bold text-blue-600 dark:text-blue-400">Recommended</p>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-white">Grilled Salmon &amp;
+                                Asparagus</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <section class="py-24 bg-white dark:bg-slate-900 relative" id="how-it-works">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-sm font-bold text-blue-600 uppercase tracking-widest mb-3">Simple Process</h2>
+                <h3 class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">From Report to Recipe in
+                    Minutes</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+                <div
+                    class="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-100 dark:from-slate-800 dark:via-slate-700 dark:to-slate-800 z-0">
+                </div>
+                <div class="relative z-10 flex flex-col items-center text-center group">
+                    <div
+                        class="w-24 h-24 rounded-3xl bg-blue-50 dark:bg-slate-800 border border-blue-100 dark:border-slate-700 flex items-center justify-center mb-6 shadow-soft group-hover:scale-110 transition-transform duration-300">
+                        <span
+                            class="material-symbols-outlined text-4xl text-blue-600 dark:text-blue-400">upload_file</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">1. Upload Report</h4>
+                    <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Securely upload your blood work or
+                        medical PDF. We support all major lab formats.</p>
+                </div>
+                <div class="relative z-10 flex flex-col items-center text-center group">
+                    <div
+                        class="w-24 h-24 rounded-3xl bg-purple-50 dark:bg-slate-800 border border-purple-100 dark:border-slate-700 flex items-center justify-center mb-6 shadow-soft group-hover:scale-110 transition-transform duration-300">
+                        <span
+                            class="material-symbols-outlined text-4xl text-purple-600 dark:text-purple-400">psychology</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">2. AI Analysis</h4>
+                    <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Our engine scans 100+ biomarkers to
+                        understand exactly what your body needs.</p>
+                </div>
+                <div class="relative z-10 flex flex-col items-center text-center group">
+                    <div
+                        class="w-24 h-24 rounded-3xl bg-emerald-50 dark:bg-slate-800 border border-emerald-100 dark:border-slate-700 flex items-center justify-center mb-6 shadow-soft group-hover:scale-110 transition-transform duration-300">
+                        <span
+                            class="material-symbols-outlined text-4xl text-emerald-600 dark:text-emerald-400">restaurant_menu</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">3. Get Your Plan</h4>
+                    <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Receive a personalized grocery list
+                        and meal plan optimized for your health goals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-24 bg-slate-50 dark:bg-background-dark" id="features">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="order-2 lg:order-1 relative">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-[2.5rem] rotate-3 opacity-20 blur-xl">
+                    </div>
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-[2.5rem] p-8 shadow-xl border border-slate-100 dark:border-slate-700 relative z-10">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div
+                                class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+                                <span class="material-symbols-outlined">monitor_heart</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg dark:text-white">Active Biomarker Tracking</h4>
+                                <p class="text-sm text-slate-500">Real-time analysis</p>
+                            </div>
+                        </div>
+                        <div class="space-y-6">
+                            <div
+                                class="group flex items-start gap-4 p-4 rounded-2xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default border border-transparent hover:border-slate-100 dark:hover:border-slate-600">
+                                <span class="material-symbols-outlined text-rose-500 mt-1">favorite</span>
+                                <div>
+                                    <h5 class="font-bold text-slate-900 dark:text-white mb-1">Heart Health Optimization
+                                    </h5>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400">Dietary adjustments to manage
+                                        cholesterol and blood pressure levels effectively.</p>
+                                </div>
+                            </div>
+                            <div
+                                class="group flex items-start gap-4 p-4 rounded-2xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default border border-transparent hover:border-slate-100 dark:hover:border-slate-600">
+                                <span class="material-symbols-outlined text-orange-500 mt-1">bolt</span>
+                                <div>
+                                    <h5 class="font-bold text-slate-900 dark:text-white mb-1">Energy &amp; Metabolism
+                                    </h5>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400">Precise macro-nutrient
+                                        balancing to stabilize energy levels throughout the day.</p>
+                                </div>
+                            </div>
+                            <div
+                                class="group flex items-start gap-4 p-4 rounded-2xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default border border-transparent hover:border-slate-100 dark:hover:border-slate-600">
+                                <span class="material-symbols-outlined text-blue-500 mt-1">security</span>
+                                <div>
+                                    <h5 class="font-bold text-slate-900 dark:text-white mb-1">Bank-Grade Privacy</h5>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400">Your medical data is encrypted
+                                        and anonymized. You are in full control.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <h2 class="text-sm font-bold text-blue-600 uppercase tracking-widest mb-3">Key Features</h2>
+                    <h3 class="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-6">Designed for Your
+                        <br />Biological Needs
+                    </h3>
+                    <p class="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+                        Generic diet apps guess. BioTrack knows. By connecting directly with your physiological data, we
+                        provide the most accurate nutrition advice available to consumers today.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+                            <span class="material-symbols-outlined text-emerald-500">check_circle</span>
+                            <span>Automatic analysis of PDF lab reports</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+                            <span class="material-symbols-outlined text-emerald-500">check_circle</span>
+                            <span>Protein targets adjusted for kidney function</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+                            <span class="material-symbols-outlined text-emerald-500">check_circle</span>
+                            <span>Micronutrient deficiency detection</span>
+                        </li>
+                    </ul>
+                    <button class="text-blue-600 font-bold hover:text-blue-700 flex items-center gap-2 group">
+                        Explore all features
+                        <span
+                            class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-24 bg-white dark:bg-slate-900" id="testimonials">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-center text-3xl font-bold text-slate-900 dark:text-white mb-16">Stories of Better Health
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div
+                    class="bg-slate-50 dark:bg-slate-800 p-8 rounded-3xl relative hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-transparent hover:border-slate-100 dark:hover:border-slate-700">
+                    <span
+                        class="material-symbols-outlined text-4xl text-blue-200 dark:text-slate-600 absolute top-6 right-6">format_quote</span>
+                    <p class="text-slate-600 dark:text-slate-300 mb-6 relative z-10 italic">
+                        "I discovered I was deficient in Vitamin D despite eating 'healthy'. BioTrack adjusted my diet,
+                        and my levels are normal for the first time in years."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-slate-300 dark:bg-slate-600 overflow-hidden">
+                            <span
+                                class="material-symbols-outlined w-full h-full flex items-center justify-center text-slate-500">person</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900 dark:text-white">Sarah Jenkins</p>
+                            <p class="text-xs text-slate-500">Lost 15lbs</p>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="bg-slate-50 dark:bg-slate-800 p-8 rounded-3xl relative hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-transparent hover:border-slate-100 dark:hover:border-slate-700">
+                    <span
+                        class="material-symbols-outlined text-4xl text-blue-200 dark:text-slate-600 absolute top-6 right-6">format_quote</span>
+                    <p class="text-slate-600 dark:text-slate-300 mb-6 relative z-10 italic">
+                        "As a diabetic, protein intake is tricky. This tool analyzed my kidney function markers and gave
+                        me a safe, high-protein meal plan instantly."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-slate-300 dark:bg-slate-600 overflow-hidden">
+                            <span
+                                class="material-symbols-outlined w-full h-full flex items-center justify-center text-slate-500">person</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900 dark:text-white">Michael Chen</p>
+                            <p class="text-xs text-slate-500">Managed A1C</p>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="bg-slate-50 dark:bg-slate-800 p-8 rounded-3xl relative hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-transparent hover:border-slate-100 dark:hover:border-slate-700">
+                    <span
+                        class="material-symbols-outlined text-4xl text-blue-200 dark:text-slate-600 absolute top-6 right-6">format_quote</span>
+                    <p class="text-slate-600 dark:text-slate-300 mb-6 relative z-10 italic">
+                        "The integration with my lab reports is seamless. I just upload the PDF from my doctor, and
+                        boom—I have a grocery list for the week."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-slate-300 dark:bg-slate-600 overflow-hidden">
+                            <span
+                                class="material-symbols-outlined w-full h-full flex items-center justify-center text-slate-500">person</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900 dark:text-white">Elena Rodriguez</p>
+                            <p class="text-xs text-slate-500">Optimized Energy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-20 px-6">
+        <div
+            class="max-w-5xl mx-auto bg-slate-900 dark:bg-blue-900/20 rounded-[3rem] p-12 lg:p-20 text-center relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-[80px]"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/20 rounded-full blur-[80px]"></div>
+            <div class="relative z-10">
+                <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6">Ready to Optimize Your Health?</h2>
+                <p class="text-slate-300 text-lg mb-10 max-w-2xl mx-auto">
+                    Join thousands of users who are taking control of their nutrition with the power of their own
+                    biological data.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="signup.html"
+                        class="bg-blue-600 text-white px-10 py-4 rounded-full font-bold hover:bg-blue-500 transition-colors shadow-lg shadow-blue-600/30">
+                        Get Started for Free
+                    </a>
+                    <button
+                        class="bg-transparent border border-white/20 text-white px-10 py-4 rounded-full font-bold hover:bg-white/10 transition-colors">
+                        Book a Demo
+                    </button>
+                </div>
+                <p class="text-slate-500 text-sm mt-6">No credit card required for initial analysis.</p>
+            </div>
+        </div>
+    </section>
+    <footer class="bg-background-light dark:bg-background-dark py-12 border-t border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-slate-900 dark:text-white">medical_services</span>
+                <span class="text-lg font-bold text-slate-900 dark:text-white">BioTrack</span>
+            </div>
+            <div class="flex gap-8 text-sm text-slate-500 dark:text-slate-400">
+                <a class="hover:text-blue-600 transition-colors" href="#">Privacy Policy</a>
+                <a class="hover:text-blue-600 transition-colors" href="#">Terms of Service</a>
+                <a class="hover:text-blue-600 transition-colors" href="#">Contact Support</a>
+            </div>
+            <div class="text-sm text-slate-400">
+                © 2023 BioTrack AI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    <script>
+        window.toggleMobileMenu = function () {
+            const menu = document.getElementById('mobileMenu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                // Small delay to allow display:block to apply before changing opacity
+                requestAnimationFrame(() => {
+                    menu.classList.remove('opacity-0', 'scale-95');
+                    menu.classList.add('opacity-100', 'scale-100');
+                });
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.remove('opacity-100', 'scale-100');
+                menu.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    menu.classList.add('hidden');
+                }, 300);
+                document.body.style.overflow = '';
+            }
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "biotrack-medical-assistant",
+  "version": "1.0.0",
+  "description": "GenomicAI Medical Assistant Platform",
+  "main": "index.html",
+  "scripts": {
+    "build": "npx tailwindcss -i ./src/input.css -o ./public/output.css --watch",
+    "prod": "npx tailwindcss -i ./src/input.css -o ./public/output.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "latest",
+    "autoprefixer": "latest",
+    "postcss": "latest"
+  }
+}
