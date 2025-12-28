@@ -40,9 +40,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve static files (HTML, etc.) from the 'public' directory
-# This allows navigation to work (e.g., dashboard.html)
-app.mount("/", StaticFiles(directory="public", html=True), name="public")
+
 
 # Global Exception Handler
 from fastapi.responses import JSONResponse
@@ -593,6 +591,11 @@ async def analyze_report(
 @app.get("/health")
 async def health_check():
     return {"status": "online", "compliance": "HIPAA-ready", "version": "1.1.0"}
+
+# Serve static files (HTML, etc.) from the 'public' directory
+# This allows navigation to work (e.g., dashboard.html)
+# Place this at the end to avoid capturing other routes
+app.mount("/", StaticFiles(directory="public", html=True), name="public")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)
