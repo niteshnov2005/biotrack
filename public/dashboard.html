@@ -476,7 +476,7 @@
         async function fetchUserData() {
             if (!token) return;
             try {
-                const res = await fetch('http://localhost:8080/users/me', {
+                const res = await fetch('/users/me', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -515,7 +515,7 @@
         async function fetchRecentReports() {
             if (!token) return;
             try {
-                const res = await fetch('http://localhost:8080/reports/history', {
+                const res = await fetch('/reports/history', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -545,7 +545,7 @@
 
         async function fetchReportDetailsForDashboard(id) {
             try {
-                const res = await fetch(`http://localhost:8080/reports/${id}`, {
+                const res = await fetch(`/reports/${id}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -599,7 +599,7 @@
             if (!token) return;
             try {
                 // Fetch Real Summary
-                const resSum = await fetch('http://localhost:8080/nutrition/summary', {
+                const resSum = await fetch('/nutrition/summary', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (resSum.ok) {
@@ -631,7 +631,7 @@
                 }
 
                 // Also fetch Plan for AI recs and GOALS
-                const res = await fetch('http://localhost:8080/nutrition/daily-plan', {
+                const res = await fetch('/nutrition/daily-plan', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -718,7 +718,7 @@
             loadingOverlay.classList.remove('hidden');
 
             try {
-                const response = await fetch('http://localhost:8080/analyze-report', {
+                const response = await fetch('/analyze-report', {
                     method: 'POST',
                     body: formData,
                     headers: token ? { 'Authorization': `Bearer ${token}` } : {}

@@ -316,7 +316,7 @@
         async function fetchUserData() {
             if (!token) return;
             try {
-                const res = await fetch('http://localhost:8080/users/me', {
+                const res = await fetch('/users/me', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -350,7 +350,7 @@
         async function fetchReportsHistory() {
             if (!token) return;
             try {
-                const res = await fetch('http://localhost:8080/reports/history', {
+                const res = await fetch('/reports/history', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -467,7 +467,7 @@
         async function viewReportDetail(id) {
             if (!token) return;
             try {
-                const res = await fetch(`http://localhost:8080/reports/${id}`, {
+                const res = await fetch(`/reports/${id}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -495,7 +495,7 @@
             if (!token) return;
 
             try {
-                const res = await fetch(`http://localhost:8080/reports/${id}`, {
+                const res = await fetch(`/reports/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -528,7 +528,7 @@
             btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> <span>Uploading...</span>';
 
             try {
-                const response = await fetch('http://localhost:8080/analyze-report', {
+                const response = await fetch('/analyze-report', {
                     method: 'POST',
                     body: formData,
                     headers: token ? { 'Authorization': `Bearer ${token}` } : {}

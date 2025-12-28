@@ -18,7 +18,7 @@
         window.handleCredentialResponse = async (response) => {
             console.log("Encoded JWT ID token: " + response.credential);
             try {
-                const res = await fetch('http://localhost:8080/auth/google', {
+                const res = await fetch('/auth/google', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ token: response.credential })
@@ -197,7 +197,7 @@
 
             // Call Backend Registration Endpoint
             try {
-                const response = await fetch('http://localhost:8080/auth/register', {
+                const response = await fetch('/auth/register', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,

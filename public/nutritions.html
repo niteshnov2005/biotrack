@@ -474,7 +474,7 @@
 
         async function fetchUserData() {
             try {
-                const res = await fetch('http://localhost:8080/users/me', {
+                const res = await fetch('/users/me', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -511,17 +511,17 @@
             if (!token) return;
             try {
                 // 1. Fetch Goals & Recommendations (from Report)
-                const planRes = await fetch('http://localhost:8080/nutrition/daily-plan', {
+                const planRes = await fetch('/nutrition/daily-plan', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
                 // 2. Fetch Actual Progress (Logged Meals)
-                const summaryRes = await fetch('http://localhost:8080/nutrition/summary', {
+                const summaryRes = await fetch('/nutrition/summary', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
                 // 3. Fetch Meal List
-                const mealsRes = await fetch('http://localhost:8080/nutrition/meals', {
+                const mealsRes = await fetch('/nutrition/meals', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
@@ -868,7 +868,7 @@
             }
 
             try {
-                const res = await fetch('http://localhost:8080/nutrition/meals', {
+                const res = await fetch('/nutrition/meals', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token} `,
@@ -912,7 +912,7 @@
                 return;
             }
             try {
-                const res = await fetch('http://localhost:8080/nutrition/protein/history', {
+                const res = await fetch('/nutrition/protein/history', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -975,7 +975,7 @@
             btn.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span>';
 
             try {
-                const res = await fetch('http://localhost:8080/nutrition/water', {
+                const res = await fetch('/nutrition/water', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify({ amount_ml: 250 })
@@ -1005,7 +1005,7 @@
             btn.innerText = "Measuring...";
 
             try {
-                const res = await fetch('http://localhost:8080/nutrition/estimate', {
+                const res = await fetch('/nutrition/estimate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ query: query })

@@ -377,7 +377,7 @@
 
         async function fetchUserData() {
             try {
-                const res = await fetch('http://localhost:8080/users/me', {
+                const res = await fetch('/users/me', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -407,7 +407,7 @@
         async function fetchAnalyticsTrends() {
             try {
                 console.log("Fetching analytics trends...");
-                const res = await fetch('http://localhost:8080/analytics/trends', {
+                const res = await fetch('/analytics/trends', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
