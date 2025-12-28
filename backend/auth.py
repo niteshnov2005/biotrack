@@ -1,18 +1,4 @@
 import os
-from datetime import datetime, timedelta
-from typing import Optional
-from jose import JWTError, jwt
-from passlib.context import CryptContext
-from fastapi import Depends, HTTPException, status, Request
-from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.orm import Session
-from dotenv import load_dotenv
-
-from . import database
-
-load_dotenv()
-
-import os
 from typing import Optional
 from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -20,7 +6,7 @@ from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import auth, credentials
-import database
+from . import database
 
 load_dotenv()
 
