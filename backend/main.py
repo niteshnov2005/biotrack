@@ -17,10 +17,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Import local modules
-from models import XRayAnalyzer
-from services import MedicalCryptoService, OCRService, DietRecommendationEngine, BiomarkerExtractor, NutritionEstimator
-import database
-import auth
+# Import local modules
+from .models import XRayAnalyzer
+from .services import MedicalCryptoService, OCRService, DietRecommendationEngine, BiomarkerExtractor, NutritionEstimator
+from . import database
+from . import auth
 
 # Initialize Database
 database.init_db()
