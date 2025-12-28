@@ -11,15 +11,28 @@ from . import database
 load_dotenv()
 
 # Initialize Firebase Admin
-# Expects serviceAccountKey.json in the backend directory
+# Expects serviceAccountKey.json in the backend directory OR FIREBASE_CREDENTIALS env var
 try:
     base_dir = os.path.dirname(os.path.abspath(__file__))
     key_path = os.path.join(base_dir, "serviceAccountKey.json")
-    cred = credentials.Certificate(key_path)
+    
+    if os.path.exists(key_path):
+        cred = credentials.Certificate(key_path)
+        print("Using serviceAccountKey.json for Firebase credentials.")
+    else:
+        import json
+        firebase_creds_json = os.getenv("FIREBASE_CREDENTIALS")
+        if firebase_creds_json:
+            cred_dict = json.loads(firebase_creds_json)
+            cred = credentials.Certificate(cred_dict)
+            print("Using FIREBASE_CREDENTIALS env var for Firebase credentials.")
+        else:
+             raise FileNotFoundError("Neither serviceAccountKey.json nor FIREBASE_CREDENTIALS env var found.")
+
     firebase_admin.initialize_app(cred)
     print("Firebase Admin Initialized successfully.")
 except Exception as e:
-    print(f"Warning: Firebase Admin failed to initialize. Ensure serviceAccountKey.json exists. Error: {e}")
+    print(f"Warning: Firebase Admin failed to initialize. Error: {e}")
 
 # Security Scheme
 security = HTTPBearer()
